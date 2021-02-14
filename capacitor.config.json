@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "Assignment2",
+  "appId": "com.filip.sk",
+  "appName": "VueMemories",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",
