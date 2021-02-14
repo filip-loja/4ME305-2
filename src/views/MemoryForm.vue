@@ -7,14 +7,9 @@
 					<ion-input type="text" required v-model="form.title" />
 				</ion-item>
 
-<!--				<ion-item>-->
-<!--					<ion-label position="floating">Image URL</ion-label>-->
-<!--					<ion-input type="url" required v-model="form.image" />-->
-<!--				</ion-item>-->
-
 				<ion-item>
 					<ion-thumbnail slot="start">
-						<ion-img :src="form.image" />
+						<ion-img :src="thumbnail" />
 					</ion-thumbnail>
 					<ion-button fill="clear" type="button" @click="takePhoto">
 						<ion-icon :icon="icons.camera" slot="start" />
@@ -36,51 +31,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { IonList, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonImg, IonThumbnail } from '@ionic/vue'
-import { camera } from 'ionicons/icons'
-
-import {Plugins, CameraResultType, CameraPhoto, FilesystemDirectory } from '@capacitor/core';
-const { Camera, Filesystem } = Plugins;
-
-// export interface Photo {
-// 	filepath: string;
-// 	webviewPath?: string;
-// }
-
-// const convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
-// 	const reader = new FileReader;
-// 	reader.onerror = reject;
-// 	reader.onload = () => {
-// 		resolve(reader.result);
-// 	};
-// 	reader.readAsDataURL(blob);
-// });
-
-// const savePicture = async (photo: CameraPhoto, fileName: string): Promise<Photo> => {
-//
-// 	// Fetch the photo, read as a blob, then convert to base64 format
-// 	const response = await fetch(photo.webPath!);
-// 	const blob = await response.blob();
-// 	const base64Data = await convertBlobToBase64(blob) as string;
-//
-// 	const savedFile = await Filesystem.writeFile({
-// 		path: fileName,
-// 		data: base64Data,
-// 		directory: FilesystemDirectory.Data
-// 	});
-//
-// 	// Use webPath to display the new image instead of base64 since it's
-// 	// already loaded into memory
-// 	return {
-// 		filepath: fileName,
-// 		webviewPath: photo.webPath
-// 	};
-// }
-
+import { defineComponent } from 'vue'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+
+import { IonList, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonImg, IonThumbnail } from '@ionic/vue'
+import { camera } from 'ionicons/icons'
+
+import {Plugins, CameraResultType, CameraPhoto, FilesystemDirectory } from '@capacitor/core'
+const { Camera, Filesystem } = Plugins
+
 
 export default defineComponent({
 	name: 'MemoryForm',
@@ -89,10 +50,11 @@ export default defineComponent({
 		const store = useStore()
 		const router = useRouter()
 
+		const thumbnail = ref(null)
 		const form = ref({
 			title: null,
 			image: null,
-			description: null
+			description: null,
 		})
 
 		const icons = {
@@ -107,15 +69,32 @@ export default defineComponent({
 		const takePhoto = async (): Promise<void> => {
 			const image: CameraPhoto = await Camera.getPhoto({
 				quality: 70,
-				allowEditing: true,
-				resultType: CameraResultType.Uri
+				allowEditing: false,
+				resultType: CameraResultType.Base64
 			})
-			form.value.image = image.webPath
+
+			const fileName = Date.now() + '.' + image.format
+
+			await Filesystem.writeFile({
+				data: image.base64String,
+				path: fileName,
+				directory: FilesystemDirectory.Data
+			})
+
+			// const file = await Filesystem.readFile({
+			// 	path: fileName,
+			// 	directory: FilesystemDirectory.Data
+			// });
+
+			// form.value.image = `data:image/jpeg;base64,${file.data}`
+			form.value.image = { path: fileName, directory: FilesystemDirectory.Data }
+			thumbnail.value = `data:image/jpeg;base64,${image.base64String}`
 		}
 
 		return {
 			form,
 			icons,
+			thumbnail,
 			saveMemory,
 			takePhoto
 		}
