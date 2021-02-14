@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store, { key } from './store'
 
 import { IonicVue } from '@ionic/vue';
 
@@ -31,7 +31,8 @@ defineCustomElements(window);
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
-  .use(store)
+  .use(store, key)
+
 
 
 import LayoutMain from '@/components/LayoutMain.vue'
@@ -40,3 +41,9 @@ app.component('layout-main', LayoutMain)
 router.isReady().then(() => {
   app.mount('#app')
 })
+
+app.config.globalProperties.$filters = {
+	pipeGeo (value: number) {
+		return value.toFixed(8)
+	}
+}

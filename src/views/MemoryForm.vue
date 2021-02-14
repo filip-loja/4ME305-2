@@ -33,7 +33,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { ref } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from '@/store'
 import { useRouter } from 'vue-router'
 
 import { IonList, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonImg, IonThumbnail } from '@ionic/vue'

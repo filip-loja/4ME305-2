@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router'
 import { RouteRecordRaw } from 'vue-router'
 import MemoriesView from '@/views/MemoriesView.vue'
+import { useStore } from '@/store'
+
+const store = useStore()
 
 const routes: Array<RouteRecordRaw> = [
   {

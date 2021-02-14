@@ -1,47 +1,59 @@
 <template>
-	<layout-main title="Geolocation">
-		<ion-button expand="block" @click="getLocation">Show my location</ion-button>
-		<ul v-if="lat && lon">
-			<li>Latitude: {{ lat }}</li>
-			<li>Longitude: {{ lon }}</li>
-		</ul>
-		<p v-if="error">{{ error }}</p>
+	<layout-main title="My location">
+		<ion-refresher slot="fixed" id="refresher" @ionRefresh="doRefresh($event)">
+			<ion-refresher-content />
+		</ion-refresher>
+
+		<ion-progress-bar v-if="loading" type="indeterminate" />
+		<template v-else>
+			<geolocation-snippet v-if="success && geo" :lat="geo.lat" :lon="geo.lon" />
+			<p v-else>Geolocation is unavailable</p>
+		</template>
+
 	</layout-main>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { IonButton} from '@ionic/vue'
+import {defineComponent, ref, computed, onBeforeUnmount} from 'vue'
+import { IonProgressBar, IonRefresher, IonRefresherContent } from '@ionic/vue'
+import { useStore } from '@/store'
+import { Geo, GeoResult } from '@/store/store'
 
-import { Plugins } from '@capacitor/core'
-const { Geolocation } = Plugins
-
-interface Data {
-	lat: number;
-	lon: number;
-	error: string;
-}
+import GeolocationSnippet from '@/components/map/GeolocationSnippet.vue'
 
 export default defineComponent({
 	name: 'GeolocationView',
-	components: {
-		IonButton
-	},
-	data (): Data {
-		return {
-			lat: null,
-			lon: null,
-			error: null
-		}
-	},
-	methods: {
-		getLocation (): void {
-			Geolocation.getCurrentPosition().then(resp => {
-				this.lat = resp.coords.latitude
-				this.lon = resp.coords.longitude
-			}).catch(err => {
-				this.error = err
+	components: { IonProgressBar, IonRefresher, IonRefresherContent, GeolocationSnippet },
+	setup () {
+
+		const store = useStore()
+		const loading = ref<boolean>(true)
+		const success = ref<boolean>(false)
+
+		const geo = computed<Geo>(() => store.state.geolocation)
+
+		const runGeolocation = (cb: () => any = null): void => {
+			store.dispatch('runGeolocation').then((res: GeoResult) => {
+				success.value = res.success
+				loading.value = false
+				if (cb) cb()
 			})
+		}
+		runGeolocation()
+
+		onBeforeUnmount(() => store.commit('SET_GEOLOCATION', null))
+
+		const doRefresh = (event: any) => {
+			store.commit('SET_GEOLOCATION', null)
+			loading.value = true
+			runGeolocation(() => event.target.complete())
+		}
+
+		return {
+			loading,
+			success,
+			geo,
+			doRefresh
 		}
 	}
 })
