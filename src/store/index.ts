@@ -1,72 +1,22 @@
-
-import {Plugins, FilesystemDirectory, FilesystemEncoding} from '@capacitor/core';
-const {Filesystem} = Plugins;
-
-const STATE_NAME = 'vuex.json'
-
-const saveState = (state: any) => {
-	Filesystem.writeFile({
-		path: STATE_NAME,
-		data: JSON.stringify(state),
-		directory: FilesystemDirectory.Data,
-		encoding: FilesystemEncoding.UTF8
-	}).then(() => console.log('STORE SAVED'))
-}
-
-export const loadState = async () => {
-	let vuexContent = null
-	let success
-	try {
-		vuexContent = await Filesystem.readFile({
-			path: STATE_NAME,
-			directory: FilesystemDirectory.Data,
-			encoding: FilesystemEncoding.UTF8
-		})
-		success = true
-		vuexContent = JSON.parse(vuexContent.data)
-	} catch (e) {
-		vuexContent = e
-		success = false
-	}
-
-	return Promise.resolve({
-		vuexContent,
-		success
-	})
-}
-
-const persistent = (store: any) => {
-	store.subscribe((mutation: any, state: any) => {
-		if (mutation.type !== 'HYDRATE') {
-			saveState(state)
-		}
-	})
-}
-
-import { InjectionKey } from 'vue'
 import { createStore, Store, useStore as baseUseStore, ModuleTree } from 'vuex'
+import { InjectionKey } from 'vue'
 import moduleStorage from '@/store/module-storage'
 import { ModulesRef } from '@/store/store'
 import { StateRoot } from '@/store/store'
 import * as actions from '@/store/actions'
 import * as mutations from '@/store/mutations'
-
+import { persistent } from '@/store/persistent'
 
 export const key: InjectionKey<Store<StateRoot & ModulesRef>> = Symbol()
-
 export function useStore () {
 	return baseUseStore(key)
 }
 
 const store = createStore<StateRoot>({
 
-	modules: {
-		storage: moduleStorage
-	},
+	modules: { storage: moduleStorage },
+	plugins: [ persistent ],
 
-	// plugins: [
-	// 	persistent
-	// ],
   state: {
 		geolocation: null,
 		items: [

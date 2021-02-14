@@ -1,5 +1,5 @@
 
-import { StateStorage, ImageItem } from '@/store/module-storage/module-storage'
+import {StateStorage, ImageItem, Credentials} from '@/store/module-storage/module-storage'
 
 export const HYDRATE = (state: StateStorage, payload: StateStorage): void => {
 	Object.assign(state, payload)
@@ -11,4 +11,8 @@ export const ADD_IMAGE = (state: StateStorage, payload: ImageItem): void => {
 
 export const REMOVE_IMAGE = (state: StateStorage, id: number): void => {
 	delete state.images[id]
+}
+
+export const SAVE_CREDENTIALS = (state: StateStorage, payload: Credentials): void => {
+	state.credentials = payload
 }

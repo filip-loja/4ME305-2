@@ -7,6 +7,7 @@
 		</template>
 
 		<ion-button expand="block" :router-link="{name: 'pageGeolocation'}">Geolocation</ion-button>
+		<ion-button expand="block" :router-link="{name: 'pageCredentials'}">Credentials</ion-button>
 		<memory-list />
 	</layout-main>
 </template>
@@ -21,7 +22,6 @@ export default defineComponent({
   components: {
     MemoryList,
     IonButton,
-		// eslint-disable-next-line vue/no-unused-components
     IonIcon
   },
 	data () {
