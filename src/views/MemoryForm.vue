@@ -43,78 +43,81 @@ import { camera } from 'ionicons/icons'
 import {Plugins, CameraResultType, CameraPhoto, FilesystemDirectory } from '@capacitor/core';
 const { Camera, Filesystem } = Plugins;
 
-export interface Photo {
-	filepath: string;
-	webviewPath?: string;
-}
+// export interface Photo {
+// 	filepath: string;
+// 	webviewPath?: string;
+// }
 
-const convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
-	const reader = new FileReader;
-	reader.onerror = reject;
-	reader.onload = () => {
-		resolve(reader.result);
-	};
-	reader.readAsDataURL(blob);
-});
+// const convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+// 	const reader = new FileReader;
+// 	reader.onerror = reject;
+// 	reader.onload = () => {
+// 		resolve(reader.result);
+// 	};
+// 	reader.readAsDataURL(blob);
+// });
 
-const savePicture = async (photo: CameraPhoto, fileName: string): Promise<Photo> => {
+// const savePicture = async (photo: CameraPhoto, fileName: string): Promise<Photo> => {
+//
+// 	// Fetch the photo, read as a blob, then convert to base64 format
+// 	const response = await fetch(photo.webPath!);
+// 	const blob = await response.blob();
+// 	const base64Data = await convertBlobToBase64(blob) as string;
+//
+// 	const savedFile = await Filesystem.writeFile({
+// 		path: fileName,
+// 		data: base64Data,
+// 		directory: FilesystemDirectory.Data
+// 	});
+//
+// 	// Use webPath to display the new image instead of base64 since it's
+// 	// already loaded into memory
+// 	return {
+// 		filepath: fileName,
+// 		webviewPath: photo.webPath
+// 	};
+// }
 
-	// Fetch the photo, read as a blob, then convert to base64 format
-	const response = await fetch(photo.webPath!);
-	const blob = await response.blob();
-	const base64Data = await convertBlobToBase64(blob) as string;
-
-	const savedFile = await Filesystem.writeFile({
-		path: fileName,
-		data: base64Data,
-		directory: FilesystemDirectory.Data
-	});
-
-	// Use webPath to display the new image instead of base64 since it's
-	// already loaded into memory
-	return {
-		filepath: fileName,
-		webviewPath: photo.webPath
-	};
-}
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
 	name: 'MemoryForm',
 	components: { IonList, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonImg, IonThumbnail },
-	data () {
-		return {
-			form: {
-				title: null,
-				image: null,
-				description: null
-			},
-			icons: {
-				camera
-			}
+	setup () {
+		const store = useStore()
+		const router = useRouter()
+
+		const form = ref({
+			title: null,
+			image: null,
+			description: null
+		})
+
+		const icons = {
+			camera
 		}
-	},
-	methods: {
-		saveMemory (): void {
-			this.$store.dispatch('addMemory', this.form)
-			// this.form = {
-			// 	title: null,
-			// 	image: null,
-			// 	description: null
-			// }
-			this.$router.replace({name: 'root'})
-		},
-		takePhoto (): void {
-			Camera.getPhoto({
+
+		const saveMemory = (): void => {
+			store.dispatch('addMemory', form.value)
+			router.replace({name: 'root'})
+		}
+
+		const takePhoto = async (): Promise<void> => {
+			const image: CameraPhoto = await Camera.getPhoto({
 				quality: 70,
 				allowEditing: true,
 				resultType: CameraResultType.Uri
-			}).then(image => {
-				// @ts-ignore
-				this.form.image = image.webPath
-
-				const fileName = new Date().getTime() + '.jpeg';
-				savePicture(image, fileName);
 			})
+			form.value.image = image.webPath
+		}
+
+		return {
+			form,
+			icons,
+			saveMemory,
+			takePhoto
 		}
 	}
 })
