@@ -1,6 +1,6 @@
 {
   "appId": "com.filip.sk",
-  "appName": "VueMemories",
+  "appName": "LNU Assignment 2",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",
