@@ -1,5 +1,5 @@
 <template>
-	<layout-main title="Image upload">
+	<layout-main title="Image upload" back>
 		<ion-progress-bar type="indeterminate" color="warning" v-if="loading" />
 		<div v-if="model">
 			<div class="img-preview">

@@ -1,5 +1,5 @@
 <template>
-	<layout-main title="Manage credentials">
+	<layout-main title="Edit image" back>
 		<div>
 			<ion-list>
 				<ion-item>

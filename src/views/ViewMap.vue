@@ -1,5 +1,5 @@
 <template>
-	<layout-main :title="title">
+	<layout-main :title="title" back>
 		<ion-refresher slot="fixed" id="refresher" @ionRefresh="refreshMap($event)">
 			<ion-refresher-content />
 		</ion-refresher>

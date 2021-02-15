@@ -2,7 +2,7 @@
 	<ion-page id="main-content">
 		<ion-header>
 			<ion-toolbar>
-				<ion-buttons slot="start" v-if="showBackButton">
+				<ion-buttons slot="start" v-if="showBackButton && back">
 					<ion-back-button :default-href="{name: 'viewImageList'}" />
 				</ion-buttons>
 				<ion-title>{{ title }}</ion-title>
@@ -57,7 +57,10 @@ export default defineComponent({
 		IonButton,
 		IonIcon
 	},
-	props: ['title'],
+	props: {
+		title: { type: String, required: true },
+		back: { type: Boolean, default: false }
+	},
 	setup () {
 		const route = useRoute()
 

@@ -1,5 +1,5 @@
 <template>
-	<layout-main :title="title">
+	<layout-main :title="title" back>
 		<div v-if="model">
 			<stored-image :source="imageSource" @load="setImageData" />
 
