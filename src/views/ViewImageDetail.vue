@@ -17,6 +17,7 @@
 				<div>{{ model.description }}</div>
 			</div>
 			<ion-button @click="deleteImage">Delete</ion-button>
+			<ion-button :router-link="{name: 'viewImageEdit', params: {id: model.id}}">Edit description</ion-button>
 		</div>
 	</layout-main>
 </template>

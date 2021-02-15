@@ -26,4 +26,8 @@ export interface StateStorage {
 	credentials: Credentials;
 }
 
+export interface EditImage {
+	id: number;
+	description: string;
+}
 

@@ -8,6 +8,11 @@ const routes: Array<RouteRecordRaw> = [
 		name: 'viewImageList'
 	},
 	{
+		path: '/images/:id/edit',
+		component: () => import('@/views/ViewImageEdit.vue'),
+		name: 'viewImageEdit'
+	},
+	{
 		path: '/images/:id',
 		component: () => import('@/views/ViewImageDetail.vue'),
 		name: 'viewImageDetail'
