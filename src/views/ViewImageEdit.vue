@@ -1,16 +1,15 @@
 <template>
 	<layout-main title="Manage credentials">
-		<div class="ion-padding">
+		<div>
 			<ion-list>
 				<ion-item>
 					<ion-label position="floating">Description</ion-label>
-					<ion-textarea :rows="6" v-model="data" />
+					<ion-textarea :rows="16" v-model="data" />
 				</ion-item>
-
-				<br /><br />
-				<ion-button class="taller-btn" expand="block" @click="saveChanges">Save</ion-button>
-
 			</ion-list>
+			<div class="ion-padding">
+				<ion-button class="taller-btn" expand="block" @click="saveChanges">Save</ion-button>
+			</div>
 		</div>
 	</layout-main>
 </template>

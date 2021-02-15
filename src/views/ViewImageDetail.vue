@@ -31,15 +31,16 @@
 				<ion-card-header>
 					<ion-card-subtitle><b>Description: </b></ion-card-subtitle>
 				</ion-card-header>
-				<ion-card-content>
+				<ion-card-content style="white-space: pre-line">
 					{{ model.description }}
 				</ion-card-content>
 			</ion-card>
 
-
-			<ion-button @click="deleteImage">Delete</ion-button>
-			<ion-button :router-link="{name: 'viewImageEdit', params: {id: model.id}}">Edit description</ion-button>
-			<ion-button @click="sendToFacebook">Post to Facebook</ion-button>
+			<image-detail-tabs
+				@click-facebook="sendToFacebook"
+				@click-edit="goToEditPage"
+				@click-delete="deleteImage"
+			/>
 		</div>
 	</layout-main>
 </template>
@@ -51,14 +52,15 @@ import { useRoute, useRouter } from 'vue-router'
 import { ImageItem } from '@/store/module-storage/module-storage'
 import StoredImage, { ImageSource } from '@/components/StoredImage.vue'
 import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
+import ImageDetailTabs from '@/components/ImageDetailTabs.vue'
 import { map } from 'ionicons/icons'
-import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle} from '@ionic/vue'
-import {confirmDeletion} from '@/utils'
-import {ImageUpload} from '@/store/store'
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
+import { confirmDeletion } from '@/utils'
+import { ImageUpload } from '@/store/store'
 
 export default defineComponent({
 	name: 'ViewImageDetail',
-	components: { StoredImage, GoogleMapHeader, IonButton, IonCard, IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle },
+	components: { StoredImage, GoogleMapHeader, IonButton, IonCard, IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle, ImageDetailTabs },
 	setup () {
 		const store = useStore()
 		const route = useRoute()
@@ -110,6 +112,10 @@ export default defineComponent({
 			imageData.value = data
 		}
 
+		const goToEditPage = () => {
+			router.push({ name: 'viewImageEdit', params: { id: model.value.id } })
+		}
+
 		return {
 			model,
 			imageSource,
@@ -118,7 +124,8 @@ export default defineComponent({
 			map,
 			showMap,
 			sendToFacebook,
-			setImageData
+			setImageData,
+			goToEditPage
 		}
 	}
 })
