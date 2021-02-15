@@ -1,7 +1,7 @@
 <template>
 	<layout-main :title="title">
 		<div v-if="model">
-			<stored-image :source="imageSource" />
+			<stored-image :source="imageSource" @load="setImageData" />
 			<div>
 				Date: {{ model.date }}
 			</div>
@@ -18,6 +18,7 @@
 			</div>
 			<ion-button @click="deleteImage">Delete</ion-button>
 			<ion-button :router-link="{name: 'viewImageEdit', params: {id: model.id}}">Edit description</ion-button>
+			<ion-button @click="sendToFacebook">Post to Facebook</ion-button>
 		</div>
 	</layout-main>
 </template>
@@ -31,7 +32,9 @@ import StoredImage, { ImageSource } from '@/components/StoredImage.vue'
 import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
 import { map } from 'ionicons/icons'
 import { IonButton } from '@ionic/vue'
-import { confirmDeletion } from '@/utils'
+import {confirmDeletion, FacebookPost} from '@/utils'
+import { postToFacebook } from '@/utils'
+import {ImageUpload} from '@/store/store'
 
 export default defineComponent({
 	name: 'ViewImageDetail',
@@ -45,6 +48,7 @@ export default defineComponent({
 		const id = computed<number>(() => Number(route.params.id))
 		const model = ref<ImageItem>(null)
 		const title = computed<string>(() => model.value ? model.value.path : '')
+		const imageData = ref<string>(null)
 
 		watch(() => id, () => {
 			if (id.value) {
@@ -74,13 +78,41 @@ export default defineComponent({
 			router.push({ name: 'viewMap' }).catch(() => null)
 		}
 
+		const sendToFacebook = () => {
+			const imageUpload: ImageUpload = {
+				...model.value,
+				data: imageData.value
+			}
+			store.commit('SET_IMAGE_UPLOAD', imageUpload)
+			router.push({ name: 'viewImageUpload', params: { id: model.value.id } })
+			// let message = model.value.description + '\n\nDate: ' + model.value.date
+			// if (model.value.geolocation) {
+			// 	message = message + `\nLocation: ${model.value.geolocation.lat} x ${model.value.geolocation.lon}`
+			// }
+			//
+			// const post: FacebookPost = {
+			// 	image: imageData.value,
+			// 	message
+			// }
+			// postToFacebook(store, post).then(resp => {
+			// 	console.log('-'.repeat(20))
+			// 	console.log(resp)
+			// })
+		}
+
+		const setImageData = (data: string): void => {
+			imageData.value = data
+		}
+
 		return {
 			model,
 			imageSource,
 			deleteImage,
 			title,
 			map,
-			showMap
+			showMap,
+			sendToFacebook,
+			setImageData
 		}
 	}
 })

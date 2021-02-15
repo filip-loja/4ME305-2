@@ -20,6 +20,7 @@ const store = createStore<StateRoot>({
   state: {
 		geolocation: null,
 		mapTitle: null,
+		imageUpload: null,
 		items: [
 			{
 				id: 'i1',

@@ -22,7 +22,7 @@ export interface ImageSource {
 export default defineComponent({
 	name: 'StoredImage',
 	components: { IonImg },
-	emits: ['press', 'long-press'],
+	emits: ['press', 'long-press', 'load'],
 	props: {
 		source: { type: Object as PropType<ImageSource|null>, default: null }
 	},
@@ -36,6 +36,7 @@ export default defineComponent({
 					directory: newSource.directory
 				})
 				imageSrc.value = `data:image/jpeg;base64,${file.data}`
+				emit('load', imageSrc.value)
 			}
 		}, { immediate: true })
 

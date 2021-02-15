@@ -1,5 +1,5 @@
 
-import { StateRoot } from '@/store/store'
+import {ImageUpload, StateRoot} from '@/store/store'
 import { Geo } from '@/store/store'
 
 export const SET_GEOLOCATION = (state: StateRoot, payload: Geo): void => {
@@ -8,4 +8,8 @@ export const SET_GEOLOCATION = (state: StateRoot, payload: Geo): void => {
 
 export const SET_MAP_TITLE = (state: StateRoot, payload: string): void => {
 	state.mapTitle = payload
+}
+
+export const SET_IMAGE_UPLOAD = (state: StateRoot, payload: ImageUpload): void => {
+	state.imageUpload = payload
 }

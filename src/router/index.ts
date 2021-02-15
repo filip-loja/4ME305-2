@@ -13,6 +13,11 @@ const routes: Array<RouteRecordRaw> = [
 		name: 'viewImageEdit'
 	},
 	{
+		path: '/images/:id/post',
+		component: () => import('@/views/ViewImageUpload.vue'),
+		name: 'viewImageUpload'
+	},
+	{
 		path: '/images/:id',
 		component: () => import('@/views/ViewImageDetail.vue'),
 		name: 'viewImageDetail'
