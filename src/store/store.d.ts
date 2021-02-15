@@ -3,6 +3,7 @@ import { StateStorage } from '@/store/module-storage/module-storage'
 export interface StateRoot {
 	items: Record<string, string>[];
 	geolocation?: Geo;
+	mapTitle: string;
 }
 
 export interface Geo {
@@ -12,9 +13,4 @@ export interface Geo {
 
 export interface ModulesRef {
 	storage: StateStorage
-}
-
-export interface GeoResult {
-	success: boolean;
-	data: Geo;
 }

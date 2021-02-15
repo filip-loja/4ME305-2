@@ -10,6 +10,7 @@
 				:lat="model.geolocation.lat"
 				:lon="model.geolocation.lon"
 				:icon="map"
+				@click="showMap"
 			/>
 			<div>
 				<div>Description</div>
@@ -66,12 +67,19 @@ export default defineComponent({
 			})
 		}
 
+		const showMap = async () => {
+			store.commit('SET_MAP_TITLE', model.value.path)
+			store.commit('SET_GEOLOCATION', model.value.geolocation)
+			router.push({ name: 'viewMap' }).catch(() => null)
+		}
+
 		return {
 			model,
 			imageSource,
 			deleteImage,
 			title,
-			map
+			map,
+			showMap
 		}
 	}
 })

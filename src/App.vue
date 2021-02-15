@@ -19,7 +19,7 @@
 			</ion-content>
 		</ion-menu>
 
-		<ion-router-outlet/>
+		<ion-router-outlet />
 
 	</ion-app>
 </template>
@@ -69,6 +69,9 @@ export default defineComponent({
 				icon: map,
 				handler: async () => {
 					await menuController.close()
+					await store.dispatch('runGeolocation')
+					store.commit('SET_MAP_TITLE', 'My location')
+					router.push({ name: 'viewMap' }).catch(() => null)
 				}
 			},
 			{
