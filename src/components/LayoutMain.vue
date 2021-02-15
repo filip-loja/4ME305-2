@@ -1,5 +1,5 @@
 <template>
-	<ion-page>
+	<ion-page id="main-content">
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start" v-if="showBackButton">
@@ -7,7 +7,9 @@
 				</ion-buttons>
 				<ion-title>{{ title }}</ion-title>
 				<ion-buttons slot="end">
-					<slot name="actions-end" />
+					<ion-button expand="block" @click="openMenu">
+						<ion-icon slot="icon-only" :icon="menu" />
+					</ion-button>
 				</ion-buttons>
 			</ion-toolbar>
 		</ion-header>
@@ -18,26 +20,61 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
-  import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/vue'
-  export default defineComponent({
-    name: 'LayoutMain',
-    components: {
-      IonPage,
-      IonHeader,
-      IonContent,
-      IonTitle,
-      IonToolbar,
-      IonBackButton,
-      IonButtons
-    },
-		props: ['title'],
-		computed: {
-			showBackButton (): boolean {
-				return !['root', 'memories'].includes(this.$route.name as string)
-			}
+import { defineComponent, computed } from 'vue'
+import {
+	IonContent,
+	IonHeader,
+	IonPage,
+	IonTitle,
+	IonToolbar,
+	IonBackButton,
+	IonButtons,
+	IonMenu,
+	IonLabel,
+	IonItem,
+	IonList,
+	IonButton,
+	menuController,
+	IonIcon
+} from '@ionic/vue'
+import { useRoute } from 'vue-router'
+import { menu } from 'ionicons/icons'
+
+export default defineComponent({
+	name: 'LayoutMain',
+	components: {
+		IonPage,
+		IonHeader,
+		IonContent,
+		IonTitle,
+		IonToolbar,
+		IonBackButton,
+		IonButtons,
+		IonMenu,
+		IonLabel,
+		IonItem,
+		IonList,
+		IonButton,
+		IonIcon
+	},
+	props: ['title'],
+	setup () {
+		const route = useRoute()
+
+		const showBackButton = computed<boolean>(() => !['root', 'memories'].includes(route.name as string))
+
+		const openMenu = async () => {
+			await menuController.open()
 		}
-  })
+
+		return {
+			showBackButton,
+			openMenu,
+			menu
+		}
+	}
+
+})
 </script>
 
 <style scoped>

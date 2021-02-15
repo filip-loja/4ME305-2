@@ -31,7 +31,12 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/credentials',
 		component: () => import('@/views/ViewCredentialForm.vue'),
-		name: 'pageCredentials'
+		name: 'viewCredentials'
+	},
+	{
+		path: '/about',
+		component: () => import('@/views/ViewAbout.vue'),
+		name: 'viewAbout'
 	},
 	{
 		path: '/images/:id',

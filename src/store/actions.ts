@@ -2,6 +2,7 @@ import { ActionContext } from 'vuex'
 import { Geo, GeoResult, StateRoot } from '@/store/store'
 import { GeolocationPosition } from '@capacitor/core'
 import { Plugins } from '@capacitor/core'
+import { menuController } from '@ionic/vue'
 const { Geolocation } = Plugins
 
 type A = ActionContext<StateRoot, StateRoot>

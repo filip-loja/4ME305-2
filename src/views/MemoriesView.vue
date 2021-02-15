@@ -7,7 +7,7 @@
 		</template>
 
 		<ion-button expand="block" :router-link="{name: 'pageGeolocation'}">Geolocation</ion-button>
-		<ion-button expand="block" :router-link="{name: 'pageCredentials'}">Credentials</ion-button>
+		<ion-button expand="block" :router-link="{name: 'viewCredentials'}">Credentials</ion-button>
 		<ion-button expand="block" @click="takePicture">Take a Picture</ion-button>
 		<memory-list />
 	</layout-main>
