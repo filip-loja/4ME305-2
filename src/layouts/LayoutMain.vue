@@ -3,7 +3,7 @@
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start" v-if="showBackButton">
-					<ion-back-button :default-href="{name: 'root'}" />
+					<ion-back-button :default-href="{name: 'viewImageList'}" />
 				</ion-buttons>
 				<ion-title>{{ title }}</ion-title>
 				<ion-buttons slot="end">

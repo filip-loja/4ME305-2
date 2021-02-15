@@ -2,20 +2,41 @@
 	<layout-main :title="title">
 		<div v-if="model">
 			<stored-image :source="imageSource" @load="setImageData" />
-			<div>
-				Date: {{ model.date }}
-			</div>
-			<google-map-header
-				v-if="model.geolocation"
-				:lat="model.geolocation.lat"
-				:lon="model.geolocation.lon"
-				:icon="map"
-				@click="showMap"
-			/>
-			<div>
-				<div>Description</div>
-				<div>{{ model.description }}</div>
-			</div>
+
+			<ion-card v-if="model.geolocation">
+				<ion-card-header>
+					<ion-card-subtitle><b>Location:</b></ion-card-subtitle>
+				</ion-card-header>
+				<ion-card-content>
+					<google-map-header
+						style="padding: 0"
+						:lat="model.geolocation.lat"
+						:lon="model.geolocation.lon"
+						:icon="map"
+						@click="showMap"
+					/>
+				</ion-card-content>
+			</ion-card>
+
+			<ion-card>
+				<ion-card-header>
+					<ion-card-subtitle><b>Date:</b></ion-card-subtitle>
+				</ion-card-header>
+				<ion-card-content>
+					{{ model.date }}
+				</ion-card-content>
+			</ion-card>
+
+			<ion-card v-if="model.description">
+				<ion-card-header>
+					<ion-card-subtitle><b>Description: </b></ion-card-subtitle>
+				</ion-card-header>
+				<ion-card-content>
+					{{ model.description }}
+				</ion-card-content>
+			</ion-card>
+
+
 			<ion-button @click="deleteImage">Delete</ion-button>
 			<ion-button :router-link="{name: 'viewImageEdit', params: {id: model.id}}">Edit description</ion-button>
 			<ion-button @click="sendToFacebook">Post to Facebook</ion-button>
@@ -31,15 +52,13 @@ import { ImageItem } from '@/store/module-storage/module-storage'
 import StoredImage, { ImageSource } from '@/components/StoredImage.vue'
 import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
 import { map } from 'ionicons/icons'
-import { IonButton } from '@ionic/vue'
-import {confirmDeletion, FacebookPost} from '@/utils'
-import { postToFacebook } from '@/utils'
+import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle} from '@ionic/vue'
+import {confirmDeletion} from '@/utils'
 import {ImageUpload} from '@/store/store'
 
 export default defineComponent({
 	name: 'ViewImageDetail',
-	// eslint-disable-next-line vue/no-unused-components
-	components: { StoredImage, GoogleMapHeader, IonButton },
+	components: { StoredImage, GoogleMapHeader, IonButton, IonCard, IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle },
 	setup () {
 		const store = useStore()
 		const route = useRoute()
@@ -85,19 +104,6 @@ export default defineComponent({
 			}
 			store.commit('SET_IMAGE_UPLOAD', imageUpload)
 			router.push({ name: 'viewImageUpload', params: { id: model.value.id } })
-			// let message = model.value.description + '\n\nDate: ' + model.value.date
-			// if (model.value.geolocation) {
-			// 	message = message + `\nLocation: ${model.value.geolocation.lat} x ${model.value.geolocation.lon}`
-			// }
-			//
-			// const post: FacebookPost = {
-			// 	image: imageData.value,
-			// 	message
-			// }
-			// postToFacebook(store, post).then(resp => {
-			// 	console.log('-'.repeat(20))
-			// 	console.log(resp)
-			// })
 		}
 
 		const setImageData = (data: string): void => {

@@ -46,8 +46,4 @@ export default defineComponent({
 	.map-header pre {
 		margin: 0;
 	}
-
-	.map-header div div + div pre {
-		padding-top: 10px;
-	}
 </style>

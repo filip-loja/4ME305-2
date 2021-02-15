@@ -2,6 +2,8 @@ import { alertController } from '@ionic/vue'
 import { useStore } from '@/store'
 import { Store } from 'vuex'
 import { StateRoot, ModulesRef } from '@/store/store'
+import {ImageItem} from '@/store/module-storage/module-storage'
+import {Filesystem} from '@capacitor/core'
 
 export const confirmDeletion = async (cb: () => void) => {
 	const alert = await alertController
@@ -49,4 +51,12 @@ export const postToFacebook = async (store: Store<StateRoot & ModulesRef>, data:
 				return Promise.reject(data.error.message)
 			}
 		})
+}
+
+export const loadImage = async (imageItem: ImageItem): Promise<string> => {
+	const file = await Filesystem.readFile({
+		path: imageItem.path,
+		directory: imageItem.directory as any
+	})
+	return Promise.resolve(`data:image/jpeg;base64,${file.data}`)
 }

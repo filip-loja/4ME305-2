@@ -29,7 +29,6 @@ import { confirmDeletion } from '@/utils'
 
 export default defineComponent({
 	name: 'ViewImageList',
-	// eslint-disable-next-line vue/no-unused-components
 	components: { StoredImage, IonGrid, IonRow, IonCol, IonRippleEffect },
 	setup () {
 		const store = useStore()
@@ -52,8 +51,8 @@ export default defineComponent({
 						text: 'Post to Facebook',
 						icon: logoFacebook,
 						handler: () => {
-							console.log('Post to Facebook')
-						},
+							router.push({ name: 'viewImageUpload', params: { id } })
+						}
 					},
 					{
 						text: 'Delete Image',

@@ -11,5 +11,5 @@ export const SET_MAP_TITLE = (state: StateRoot, payload: string): void => {
 }
 
 export const SET_IMAGE_UPLOAD = (state: StateRoot, payload: ImageUpload): void => {
-	state.imageUpload = payload
+	state.imageUpload = { ...payload }
 }
