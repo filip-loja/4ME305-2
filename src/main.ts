@@ -35,7 +35,7 @@ const app = createApp(App)
 
 
 
-import LayoutMain from '@/components/LayoutMain.vue'
+import LayoutMain from '@/layouts/LayoutMain.vue'
 app.component('layout-main', LayoutMain)
 
 router.isReady().then(() => {

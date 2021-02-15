@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref, watch } from 'vue'
 import {
 	IonContent,
 	IonHeader,
@@ -61,7 +61,12 @@ export default defineComponent({
 	setup () {
 		const route = useRoute()
 
-		const showBackButton = computed<boolean>(() => !['root', 'memories'].includes(route.name as string))
+		const isHomeRoute = computed<boolean>(() => route.name !== 'viewImageList')
+		const showBackButton = ref<boolean>(false)
+
+		watch(() => isHomeRoute, newVal => {
+			setTimeout(() => (showBackButton.value = newVal.value), 200)
+		}, { immediate: true })
 
 		const openMenu = async () => {
 			await menuController.open()
