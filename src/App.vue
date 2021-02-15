@@ -1,11 +1,11 @@
 <template>
-	<ion-app>
+	<ion-app v-if="!loading">
 		<ion-router-outlet/>
 	</ion-app>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useStore } from '@/store'
 import { loadState } from '@/store/persistent'
 import { IonApp, IonRouterOutlet } from '@ionic/vue'
@@ -15,11 +15,16 @@ export default defineComponent({
 	components: { IonApp, IonRouterOutlet },
 	setup () {
 		const store = useStore()
+		const loading = ref(true)
 		loadState().then(res => {
+			loading.value = false
 			if (res.success) {
 				store.commit('storage/HYDRATE', res.vuexContent)
 			}
 		})
+		return {
+			loading
+		}
 	}
 })
 </script>

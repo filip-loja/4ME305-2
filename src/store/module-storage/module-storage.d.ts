@@ -3,7 +3,6 @@ import { Geo } from '@/store/store'
 
 export interface ImageItem {
 	id?: number;
-	title?: string;
 	description?: string;
 	directory: string;
 	path: string;
@@ -23,7 +22,8 @@ export interface Credentials {
 
 export interface StateStorage {
 	images: ImageMap;
-	credentials: Credentials
+	imageId: number;
+	credentials: Credentials;
 }
 
 
