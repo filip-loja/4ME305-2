@@ -1,9 +1,15 @@
 import { alertController } from '@ionic/vue'
-import { useStore } from '@/store'
 import { Store } from 'vuex'
 import { StateRoot, ModulesRef } from '@/store/store'
-import {ImageItem} from '@/store/module-storage/module-storage'
-import {Filesystem} from '@capacitor/core'
+import { ImageItem } from '@/store/module-storage/module-storage'
+import { Filesystem } from '@capacitor/core'
+
+export const withTimeout = (timeout: number, userPromise: Promise<any>): Promise<any> => {
+	const checkPromise = new Promise((resolve, reject) => {
+		return setTimeout(() => reject('Request timed out'), timeout)
+	})
+	return Promise.race([checkPromise, userPromise])
+}
 
 export const confirmDeletion = async (cb: () => void) => {
 	const alert = await alertController
@@ -42,15 +48,17 @@ export const postToFacebook = async (store: Store<StateRoot & ModulesRef>, data:
 	formData.append('source', blob)
 	const url = `https://graph.facebook.com/${store.state.storage.credentials.facebookPage}/photos`
 
-	return fetch(url, { body: formData, method: 'post' })
+	const request = fetch(url, { body: formData, method: 'post' })
 		.then(response => response.json())
 		.then(data => {
 			if (data.id) {
-				return Promise.resolve(null)
+				return null
 			} else {
-				return Promise.reject(data.error.message)
+				return data.error.message
 			}
 		})
+
+	return withTimeout(15000, request).catch(e => e)
 }
 
 export const loadImage = async (imageItem: ImageItem): Promise<string> => {

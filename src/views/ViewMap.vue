@@ -23,7 +23,7 @@ export default defineComponent({
 		const router = useRouter()
 
 		const geo = computed<Geo>(() => store.state.geolocation)
-		const title = computed<string>(() => store.state.mapTitle === '[ME]' ? 'My location' : store.state.mapTitle)
+		const title = computed<string>(() => store.state.mapTitle === '[ME]' ? 'My location' : (store.state.mapTitle || ''))
 		const useBackBtn = computed<boolean>(() => store.state.mapTitle !== '[ME]')
 		const loading = ref<boolean>(false)
 
@@ -33,7 +33,7 @@ export default defineComponent({
 						header: 'Google map unavailable!',
 						message: 'Please check your geolocation settings and try again.',
 						buttons: [
-							{ text: 'Ok', handler: () => router.back() }
+							{ text: 'Ok', handler: () => router.push({ name: 'viewImageList' }) }
 						],
 					})
 				return alert.present()
