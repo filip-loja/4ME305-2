@@ -3,9 +3,6 @@
 		v-if="imageSrc"
 		:src="imageSrc"
 		@contextmenu="onContextMenu"
-		@touchstart="longPressStart"
-		@touchend="longPressEnd"
-		@touchmove="onTouchMove"
 	/>
 </template>
 
@@ -23,7 +20,7 @@ export interface ImageSource {
 export default defineComponent({
 	name: 'StoredImage',
 	components: { IonImg },
-	emits: ['press', 'long-press', 'load'],
+	emits: ['load'],
 	props: {
 		source: { type: Object as PropType<ImageSource|null>, default: null }
 	},
@@ -41,67 +38,14 @@ export default defineComponent({
 			}
 		}, { immediate: true })
 
-		// @ts-ignore
-		let timeoutRef = null
-		let touchStart: number = null
-		let touchEnd: number = null
-		const threshold = 1000
-
-		let touchStartX = 0
-		let touchStartY = 0
-		let moveStart = false
-		let cancelled = false
-		const moveThreshold = 50
-
-		const emitLongPress = () => {
-			if (!cancelled) {
-				emit('long-press')
-			}
-		}
-
-		const longPressStart = () => {
-			moveStart = true
-			cancelled = false
-			touchStart = Date.now()
-			timeoutRef = setTimeout(emitLongPress, threshold)
-		}
-
-		const longPressEnd = (e: Event) => {
-			e.preventDefault()
-			touchEnd = Date.now()
-			// @ts-ignore
-			clearTimeout(timeoutRef)
-			timeoutRef = null
-			if ((touchEnd - touchStart) < threshold && !cancelled) {
-				emit('press')
-			}
-		}
-
 		const onContextMenu = (e: Event) => {
 			e.preventDefault()
 			return true
 		}
 
-		const onTouchMove = (e: any) => {
-			if (moveStart) {
-				touchStartX = e.targetTouches[0].screenX
-				touchStartY = e.targetTouches[0].screenY
-				moveStart = false
-			} else if (!cancelled) {
-				const diffX = touchStartX - e.targetTouches[0].screenX
-				const diffY = touchStartY - e.targetTouches[0].screenY
-				if (Math.abs(diffX) > moveThreshold || Math.abs(diffY) > moveThreshold) {
-					cancelled = true
-				}
-			}
-		}
-
 		return {
 			imageSrc,
-			longPressStart,
-			longPressEnd,
 			onContextMenu,
-			onTouchMove
 		}
 	}
 })

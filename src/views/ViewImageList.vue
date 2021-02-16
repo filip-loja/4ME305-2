@@ -2,15 +2,14 @@
 	<layout-main title="Gallery">
 		<ion-grid>
 			<ion-row>
-				<ion-col size="4" v-for="img in imageList" :key="img.id">
-					<div class="ion-activatable ripple-parent">
-						<stored-image
-							:source="{ path: img.path, directory: img.directory }"
-							@long-press="showActionSheet(img.id)"
-							@press="showImageDetail(img.id)"
-						/>
-						<ion-ripple-effect />
-					</div>
+				<ion-col size="4" v-for="img in imageList" :key="img.id" style="padding: 0">
+					<media-thumbnail
+						type="image"
+						@long-press="showActionSheet(img.id)"
+						@press="showImageDetail(img.id)"
+					>
+						<stored-image :source="{ path: img.path, directory: img.directory }" />
+					</media-thumbnail>
 				</ion-col>
 			</ion-row>
 		</ion-grid>
@@ -24,12 +23,13 @@ import { useRouter } from 'vue-router'
 import { ImageItem } from '@/store/module-storage/module-storage'
 import { IonGrid, IonRow, IonCol, IonRippleEffect, actionSheetController } from '@ionic/vue'
 import StoredImage from '@/components/StoredImage.vue'
+import MediaThumbnail from '@/components/MediaThumbnail.vue'
 import { close, trash, logoFacebook, eye } from 'ionicons/icons'
 import { confirmDeletion } from '@/utils'
 
 export default defineComponent({
 	name: 'ViewImageList',
-	components: { StoredImage, IonGrid, IonRow, IonCol, IonRippleEffect },
+	components: { StoredImage, IonGrid, IonRow, IonCol, IonRippleEffect, MediaThumbnail },
 	setup () {
 		const store = useStore()
 		const router = useRouter()
