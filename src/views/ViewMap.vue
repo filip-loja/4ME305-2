@@ -1,5 +1,5 @@
 <template>
-	<layout-main :title="title" back>
+	<layout-main :title="title" :back="useBackBtn">
 		<ion-refresher slot="fixed" id="refresher" @ionRefresh="refreshMap($event)">
 			<ion-refresher-content />
 		</ion-refresher>
@@ -23,7 +23,8 @@ export default defineComponent({
 		const router = useRouter()
 
 		const geo = computed<Geo>(() => store.state.geolocation)
-		const title = computed<string>(() => store.state.mapTitle)
+		const title = computed<string>(() => store.state.mapTitle === '[ME]' ? 'My location' : store.state.mapTitle)
+		const useBackBtn = computed<boolean>(() => store.state.mapTitle !== '[ME]')
 		const loading = ref<boolean>(false)
 
 		watch(() => geo, async (newGeo) => {
@@ -49,7 +50,8 @@ export default defineComponent({
 		return {
 			geo,
 			title,
-			refreshMap
+			refreshMap,
+			useBackBtn
 		}
 	}
 })

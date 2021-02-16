@@ -1,5 +1,5 @@
 <template>
-	<layout-main :title="title" back>
+	<layout-main :title="title" :back-href="{ name: 'viewImageList' }">
 		<div v-if="model">
 			<stored-image :source="imageSource" @load="setImageData" />
 

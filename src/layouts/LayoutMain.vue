@@ -2,8 +2,11 @@
 	<ion-page id="main-content">
 		<ion-header>
 			<ion-toolbar>
-				<ion-buttons slot="start" v-if="showBackButton && back">
-					<ion-back-button :default-href="{name: 'viewImageList'}" />
+				<ion-buttons slot="start" v-if="back || backHref">
+					<ion-back-button v-if="back" :default-href="{name: 'viewImageList'}" />
+					<ion-button v-else :router-link="backHref">
+						<ion-icon slot="icon-only" :icon="arrowBack" />
+					</ion-button>
 				</ion-buttons>
 				<ion-title>{{ title }}</ion-title>
 				<ion-buttons slot="end">
@@ -38,7 +41,7 @@ import {
 	IonIcon
 } from '@ionic/vue'
 import { useRoute } from 'vue-router'
-import { menu } from 'ionicons/icons'
+import { menu, arrowBack } from 'ionicons/icons'
 
 export default defineComponent({
 	name: 'LayoutMain',
@@ -59,26 +62,18 @@ export default defineComponent({
 	},
 	props: {
 		title: { type: String, required: true },
-		back: { type: Boolean, default: false }
+		back: { type: Boolean, default: false },
+		backHref: { type: Object, default: null }
 	},
 	setup () {
-		const route = useRoute()
-
-		const isHomeRoute = computed<boolean>(() => route.name !== 'viewImageList')
-		const showBackButton = ref<boolean>(false)
-
-		watch(() => isHomeRoute, newVal => {
-			setTimeout(() => (showBackButton.value = newVal.value), 200)
-		}, { immediate: true })
-
 		const openMenu = async () => {
 			await menuController.open()
 		}
 
 		return {
-			showBackButton,
 			openMenu,
-			menu
+			menu,
+			arrowBack
 		}
 	}
 

@@ -70,7 +70,7 @@ export default defineComponent({
 				handler: async () => {
 					await menuController.close()
 					await store.dispatch('runGeolocation')
-					store.commit('SET_MAP_TITLE', 'My location')
+					store.commit('SET_MAP_TITLE', '[ME]')
 					router.push({ name: 'viewMap' }).catch(() => null)
 				}
 			},
