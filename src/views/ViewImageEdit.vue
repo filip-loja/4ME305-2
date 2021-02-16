@@ -4,7 +4,7 @@
 			<ion-list>
 				<ion-item>
 					<ion-label position="floating">Description</ion-label>
-					<ion-textarea :rows="16" v-model="data" />
+					<ion-textarea :rows="10" v-model="data" />
 				</ion-item>
 			</ion-list>
 			<div class="ion-padding">

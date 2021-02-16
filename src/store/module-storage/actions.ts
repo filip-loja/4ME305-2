@@ -40,7 +40,7 @@ export const takePicture = async (context: A): Promise<number> => {
 
 	const imageItem: ImageItem = {
 		id: context.state.imageId,
-		date: (new Date()).toUTCString(),
+		date: (new Date()).toString().split('(')[0].trim(),
 		description: null,
 		path: fileName,
 		directory: directory,
