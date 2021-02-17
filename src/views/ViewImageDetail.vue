@@ -74,8 +74,6 @@ export default defineComponent({
 		watch(() => id.value, () => {
 			if (id.value) {
 				model.value = store.state.storage.images[id.value]
-			} else {
-				setTimeout(() => model.value = null, 500)
 			}
 		}, { immediate: true })
 
