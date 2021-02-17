@@ -93,13 +93,13 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style>
 
 	.media-thumbnail {
 		display: block;
 		box-sizing: border-box;
 		width: 100%;
-		height: 80px;
+		height: 100px;
 		position: relative;
 		padding: 4px;
 	}
@@ -116,6 +116,8 @@ export default defineComponent({
 
 	.media-thumbnail__slot > * {
 		width: 100%;
+		height: 100%;
+		object-fit: cover !important;
 	}
 
 	.media-thumbnail__icon {

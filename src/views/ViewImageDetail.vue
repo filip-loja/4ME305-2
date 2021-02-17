@@ -73,7 +73,11 @@ export default defineComponent({
 
 		watch(() => id.value, () => {
 			if (id.value) {
+				clearTimeout(store.state.timeoutRef)
 				model.value = store.state.storage.images[id.value]
+			} else {
+				const ref = setTimeout(() => model.value = null, 500)
+				store.commit('SET_TIMEOUT_REF', ref)
 			}
 		}, { immediate: true })
 
