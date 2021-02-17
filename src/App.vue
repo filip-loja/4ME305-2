@@ -80,6 +80,14 @@ export default defineComponent({
 					await menuController.close()
 					router.push({ name: 'viewAbout' }).catch(() => null)
 				}
+			},
+			{
+				label: 'Record Video',
+				icon: helpCircle,
+				handler: async () => {
+					await menuController.close()
+					router.push({ name: 'viewVideoRecorder' }).catch(() => null)
+				}
 			}
 		])
 
