@@ -77,8 +77,8 @@ export default defineComponent({
 				label: 'About',
 				icon: helpCircle,
 				handler: async () => {
-					router.push({ name: 'viewAbout' }).catch(() => null)
 					await menuController.close()
+					router.push({ name: 'viewAbout' }).catch(() => null)
 				}
 			}
 		])
