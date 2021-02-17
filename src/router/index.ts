@@ -54,7 +54,6 @@ router.beforeEach((to, from, next) => {
 		if (store.state.imageUpload === null || store.state.imageUpload.id !== id) {
 			// @ts-ignore
 			const tmpModel = store.state.storage.images[id]
-			errorAlert(JSON.stringify(tmpModel))
 			loadImage(tmpModel).then(data => {
 				const imageUpload: ImageUpload = { ...tmpModel, data }
 				store.commit('SET_IMAGE_UPLOAD', imageUpload)
