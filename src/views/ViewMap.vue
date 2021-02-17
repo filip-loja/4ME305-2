@@ -1,6 +1,6 @@
 <template>
 	<layout-main :title="title" :back="useBackBtn">
-		<ion-refresher slot="fixed" id="refresher" @ionRefresh="refreshMap($event)">
+		<ion-refresher slot="fixed" id="refresher" @ionRefresh="refreshMap($event)" v-if="findMeVariant">
 			<ion-refresher-content />
 		</ion-refresher>
 		<geolocation-snippet v-if="geo" :lat="geo.lat" :lon="geo.lon" />
@@ -22,8 +22,9 @@ export default defineComponent({
 		const store = useStore()
 		const router = useRouter()
 
+		const findMeVariant = computed<boolean>(() => store.state.mapTitle === '[ME]')
 		const geo = computed<Geo>(() => store.state.geolocation)
-		const title = computed<string>(() => store.state.mapTitle === '[ME]' ? 'My location' : (store.state.mapTitle || ''))
+		const title = computed<string>(() => findMeVariant.value ? 'My location' : (store.state.mapTitle || ''))
 		const useBackBtn = computed<boolean>(() => store.state.mapTitle !== '[ME]')
 		const loading = ref<boolean>(false)
 
@@ -51,7 +52,8 @@ export default defineComponent({
 			geo,
 			title,
 			refreshMap,
-			useBackBtn
+			useBackBtn,
+			findMeVariant
 		}
 	}
 })
