@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue'
+import { defineComponent } from 'vue'
 import {
 	IonContent,
 	IonHeader,

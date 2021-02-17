@@ -71,7 +71,7 @@ export default defineComponent({
 		const title = computed<string>(() => model.value ? model.value.path : '')
 		const imageData = ref<string>(null)
 
-		watch(() => id, () => {
+		watch(() => id.value, () => {
 			if (id.value) {
 				model.value = store.state.storage.images[id.value]
 			} else {

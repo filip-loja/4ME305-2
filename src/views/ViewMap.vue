@@ -27,8 +27,8 @@ export default defineComponent({
 		const useBackBtn = computed<boolean>(() => store.state.mapTitle !== '[ME]')
 		const loading = ref<boolean>(false)
 
-		watch(() => geo, async (newGeo) => {
-			if (!newGeo.value && !loading.value) {
+		watch(() => geo.value, async (newGeo) => {
+			if (!newGeo && !loading.value) {
 				const alert = await alertController.create({
 						header: 'Google map unavailable!',
 						message: 'Please check your geolocation settings and try again.',
