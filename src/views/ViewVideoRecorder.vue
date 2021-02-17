@@ -15,13 +15,9 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { IonButton } from '@ionic/vue'
-import { MediaCapture } from '@ionic-native/media-capture'
-
-import { Capacitor, Plugins, FilesystemDirectory } from '@capacitor/core';
-import * as WebVPPlugin from 'capacitor-video-player';
-const { CapacitorVideoPlayer } = Plugins;
-
-const { Filesystem } = Plugins
+import { Capacitor, Plugins, FilesystemDirectory } from '@capacitor/core'
+import * as WebVPPlugin from 'capacitor-video-player'
+const { CapacitorVideoPlayer, Filesystem } = Plugins
 
 export default defineComponent({
 	name: 'ViewVideoRecorder',
@@ -55,7 +51,7 @@ export default defineComponent({
 		const saveVideo = async (blob: Blob) => {
 			const fileName = Date.now() + '.mp4'
 			const base64Data = await convertBlobToBase64(blob) as string;
-			const savedFile = await Filesystem.writeFile({
+			await Filesystem.writeFile({
 				path: fileName,
 				data: base64Data,
 				directory: FilesystemDirectory.Data
@@ -64,17 +60,6 @@ export default defineComponent({
 		}
 
 		const recordVideo = async () => {
-			// const options = {
-			// 	limit: 1,
-			// 	duration: 10
-			// }
-			//
-			// MediaCapture.captureVideo(options).then((res: any) => {
-			// 	const capturedFile = res[0]
-			//
-			// 	debug.value = Capacitor.convertFileSrc(capturedFile.fullPath) + '  ---  ' + Capacitor.convertFileSrc(capturedFile.localURL)
-			// })
-
 			isRecording.value = true
 			const stream = await navigator.mediaDevices.getUserMedia({
 				video: { facingMode: 'user' },
@@ -119,8 +104,7 @@ export default defineComponent({
 		}
 
 		const playVideo = async (fileName: string) => {
-			const videoData = await loadVideo(fileName)
-			player.value.src = videoData
+			player.value.src = await loadVideo(fileName)
 			// await videoPlayer.initPlayer({
 			// 	mode: 'fullscreen',
 			// 	url: videoData,
