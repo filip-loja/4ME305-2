@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router'
 import { RouteRecordRaw } from 'vue-router'
+import store from '@/store'
+import { loadImage } from '@/utils'
+import {ImageUpload} from '@/store/store'
+import { errorAlert } from '@/utils'
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -42,6 +46,25 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+	if (to.name === 'viewImageUpload') {
+		const id = Number(to.params.id)
+		if (store.state.imageUpload === null || store.state.imageUpload.id !== id) {
+			// @ts-ignore
+			const tmpModel = store.state.storage.images[id]
+			loadImage(tmpModel).then(data => {
+				const imageUpload: ImageUpload = { ...tmpModel, data }
+				store.commit('SET_IMAGE_UPLOAD', imageUpload)
+				next()
+			}).catch((e) => errorAlert(e).then(() => next(false)))
+		} else {
+			next()
+		}
+	} else {
+		next()
+	}
 })
 
 export default router

@@ -24,7 +24,7 @@ import { ImageItem } from '@/store/module-storage/module-storage'
 import { IonGrid, IonRow, IonCol, IonRippleEffect, actionSheetController } from '@ionic/vue'
 import StoredImage from '@/components/StoredImage.vue'
 import MediaThumbnail from '@/components/MediaThumbnail.vue'
-import { close, trash, logoFacebook, eye } from 'ionicons/icons'
+import { close, trash, logoFacebook, eye, pencil } from 'ionicons/icons'
 import { confirmDeletion } from '@/utils'
 
 export default defineComponent({
@@ -46,6 +46,13 @@ export default defineComponent({
 						text: 'View Image',
 						icon: eye,
 						handler: () => showImageDetail(id),
+					},
+					{
+						text: 'Edit Image',
+						icon: pencil,
+						handler: () => {
+							router.push({ name: 'viewImageEdit', params: { id } })
+						}
 					},
 					{
 						text: 'Post to Facebook',

@@ -1,7 +1,6 @@
 import {ImageItem, StateStorage} from '@/store/module-storage/module-storage'
 
 export interface StateRoot {
-	items: Record<string, string>[];
 	geolocation?: Geo;
 	mapTitle: string;
 	imageUpload: ImageUpload;

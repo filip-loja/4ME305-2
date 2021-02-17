@@ -46,11 +46,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch, ref, onBeforeUnmount } from 'vue'
+import { defineComponent, computed, ref, onBeforeUnmount } from 'vue'
 import { useStore } from '@/store'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { ImageUpload } from '@/store/store'
-import { FacebookPost, loadImage, postToFacebook } from '@/utils'
+import { FacebookPost, postToFacebook } from '@/utils'
 import { IonList, IonItem, IonLabel, IonInput, IonButton, IonTextarea, IonToggle, alertController, IonProgressBar, IonImg } from '@ionic/vue'
 
 export default defineComponent({
@@ -59,29 +59,10 @@ export default defineComponent({
 	setup () {
 		const store = useStore()
 		const router = useRouter()
-		const route = useRoute()
-		const id = computed<number>(() => Number(route.params.id))
 		const model = computed<ImageUpload>(() => store.state.imageUpload)
 		const loading = ref<boolean>(false)
 
-		watch(() => id.value, async (newId) => {
-			if (newId && (!model.value || model.value.id !== newId)) {
-				const tmpModel = store.state.storage.images[newId]
-				const data = await loadImage(tmpModel)
-				const imageUpload: ImageUpload = {
-					...tmpModel,
-					data
-				}
-				store.commit('SET_IMAGE_UPLOAD', imageUpload)
-			}
-		}, { immediate: true})
-
-		const description = ref<string>(null)
-		watch(() => model.value, () => {
-			description.value = model.value ? model.value.description : null
-		}, { immediate: true})
-
-
+		const description = ref<string>(model.value.description)
 		const useDescription = ref<boolean>(true)
 		const useDate = ref<boolean>(true)
 		const useGeolocation = ref<boolean>(true)
@@ -109,7 +90,6 @@ export default defineComponent({
 							text: 'Ok',
 							handler: () => {
 								router.push({ name: 'viewImageDetail', params: { id: model.value.id } })
-								// store.commit('SET_IMAGE_UPLOAD', null)
 							}
 						}]
 					}).then(alert => alert.present())

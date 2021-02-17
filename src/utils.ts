@@ -11,6 +11,18 @@ export const withTimeout = (timeout: number, userPromise: Promise<any>): Promise
 	return Promise.race([checkPromise, userPromise])
 }
 
+export const errorAlert = (message: string) => {
+	return alertController.create({
+		header: 'Error!',
+		message,
+		backdropDismiss: false,
+		buttons: [{
+			text: 'Ok',
+			role: 'cancel'
+		}]
+	}).then(alert => alert.present())
+}
+
 export const confirmDeletion = async (cb: () => void) => {
 	const alert = await alertController
 		.create({

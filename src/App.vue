@@ -1,5 +1,5 @@
 <template>
-	<ion-app v-if="!loading">
+	<ion-app>
 
 		<ion-menu side="end" content-id="main-content">
 			<ion-content>
@@ -27,7 +27,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useStore } from '@/store'
-import { loadState } from '@/store/persistent'
 import { useRouter } from 'vue-router'
 import { IonApp, IonRouterOutlet, menuController, IonMenu, IonContent, IonList, IonItem, IonLabel, IonIcon, IonRippleEffect } from '@ionic/vue'
 import { home, helpCircle, map, card, camera } from 'ionicons/icons'
@@ -38,14 +37,6 @@ export default defineComponent({
 	setup () {
 		const store = useStore()
 		const router = useRouter()
-		const loading = ref(true)
-
-		loadState().then(res => {
-			loading.value = false
-			if (res.success) {
-				store.commit('storage/HYDRATE', res.vuexContent)
-			}
-		})
 
 		const menuItems = ref([
 			{
@@ -93,7 +84,6 @@ export default defineComponent({
 		])
 
 		return {
-			loading,
 			menuItems
 		}
 	}
