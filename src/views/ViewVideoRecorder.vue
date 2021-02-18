@@ -1,73 +1,98 @@
 <template>
 	<layout-main title="Video recorder">
-		<video class="video" ref="video" autoplay playsinline muted style="width: 100%"></video>
-		<ion-button @click="recordVideo">Record</ion-button>
-		<ion-button @click="stopRecord">Stop</ion-button>
-		<ion-button @click="playVideo('1613598255686.mp4')">Play</ion-button>
+		<div class="recorder-bg">
+			<video class="video" ref="video" autoplay playsinline muted style="width: 100%"></video>
+<!--			<ion-button @click="playVideo('1613598255686.mp4')">Play</ion-button>-->
 
-		<div id="video-player"></div>
+<!--			<div id="video-player"></div>-->
 
-		<video class="video2" ref="player" autoplay controls style="width: 100%"></video>
+			<!--		<video class="video2" ref="player" autoplay controls style="width: 100%"></video>-->
+			<div class="video-panel">
+				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side">
+					<ion-icon :icon="repeat" color="light" />
+				</ion-button>
 
+				<ion-button :color="recIconColor" class="rec-btn" @click="toggleRecording">
+					<ion-icon :icon="recIcon" />
+				</ion-button>
+
+				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side" @click="closeCamera">
+					<ion-icon :icon="close" color="light" />
+				</ion-button>
+			</div>
+		</div>
 	</layout-main>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { IonButton } from '@ionic/vue'
+import { defineComponent, ref, computed, watch } from 'vue'
+import {alertController, IonButton, IonIcon} from '@ionic/vue'
+import { videocam, radioButtonOn, close, repeat } from 'ionicons/icons'
 import { Capacitor, Plugins, FilesystemDirectory } from '@capacitor/core'
 import * as WebVPPlugin from 'capacitor-video-player'
 const { CapacitorVideoPlayer, Filesystem } = Plugins
+import { useStore } from '@/store'
+import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'ViewVideoRecorder',
-	components: { IonButton },
+	components: { IonButton, IonIcon },
 	setup () {
-		const debug = ref(null)
-		const local = ref(null)
-		const full = ref(null)
-		const video = ref(null)
+		const store = useStore()
+		const route = useRoute()
+		const router = useRouter()
+
 		const player = ref(null)
 		const isRecording = ref<boolean>(false)
 
-		let videoPlayer: any = null
+		let stream: any = null
+		const video = ref(null)
 
-
-		if (Capacitor.isNative) {
-			videoPlayer = CapacitorVideoPlayer
-		} else {
-			videoPlayer = WebVPPlugin.CapacitorVideoPlayer
+		const closeStream = () => {
+			if (stream) {
+				stream.getTracks().forEach((track: any) => track.stop())
+				stream = null
+			}
 		}
+
+		watch(() => route.name, async routeName => {
+			if (routeName === 'viewVideoRecorder') {
+				stream = await navigator.mediaDevices.getUserMedia({
+					video: { facingMode: 'user' },
+					audio: true
+				})
+				video.value.srcObject = stream
+			} else {
+				closeStream()
+				video.value.srcObject = null
+			}
+		}, { immediate: true })
+
+		const recIcon = computed(() => isRecording.value ? radioButtonOn : videocam)
+		const recIconColor = computed(() => isRecording.value ? 'danger' : 'light')
 
 		let mediaRecorder: any = null
 
-		const convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
-			const reader = new FileReader()
-			reader.onerror = () => reject(null)
-			reader.onload = () => resolve(reader.result)
-			reader.readAsDataURL(blob)
-		})
-
-		const saveVideo = async (blob: Blob) => {
-			const fileName = Date.now() + '.mp4'
-			const base64Data = await convertBlobToBase64(blob) as string;
-			await Filesystem.writeFile({
-				path: fileName,
-				data: base64Data,
-				directory: FilesystemDirectory.Data
+		const saveVideo = (blob: Blob) => {
+			store.dispatch('storage/saveVideo', blob).then(res => {
+				if (typeof res === 'number') {
+					console.log('SUCCESS: ', res)
+				} else {
+					alertController.create({
+							header: 'Error!',
+							message: res,
+							backdropDismiss: false,
+							buttons: [{
+								text: 'Ok',
+								role: 'cancel'
+							}]
+						}).then(alert => alert.present())
+				}
 			})
-			console.log(fileName)
 		}
 
-		const recordVideo = async () => {
+		const startRecording = async () => {
 			isRecording.value = true
-			const stream = await navigator.mediaDevices.getUserMedia({
-				video: { facingMode: 'user' },
-				audio: true
-			})
-
-			video.value.srcObject = stream
-
 			const options = { mimeType: 'video/webm' }
 			// @ts-ignore
 			mediaRecorder = new MediaRecorder(stream, options)
@@ -88,13 +113,13 @@ export default defineComponent({
 			mediaRecorder.start(100)
 		}
 
-		const stopRecord = () => {
+		const stopRecording = () => {
 			mediaRecorder.stop()
 			mediaRecorder = null
 			isRecording.value = false
-			video.value.srcObject = null
 		}
 
+		// TODO prec
 		const loadVideo = async (fileName: string) =>  {
 			const file = await Filesystem.readFile({
 				path: fileName,
@@ -103,29 +128,70 @@ export default defineComponent({
 			return `data:video/mp4;base64,${file.data}`
 		}
 
+		// TODO prec
 		const playVideo = async (fileName: string) => {
 			player.value.src = await loadVideo(fileName)
-			// await videoPlayer.initPlayer({
-			// 	mode: 'fullscreen',
-			// 	url: videoData,
-			// 	playerId: 'video-player'
-			// })
 		}
 
+		const toggleRecording = () => {
+			if (isRecording.value) {
+				stopRecording()
+			} else {
+				startRecording()
+			}
+		}
+
+		const closeCamera = () => router.back()
+
 		return {
-			recordVideo,
-			stopRecord,
+			toggleRecording,
 			playVideo,
-			debug,
-			local,
-			full,
 			video,
-			player
+			player,
+			recIcon,
+			recIconColor,
+			close,
+			repeat,
+			closeCamera
 		}
 	}
 })
 </script>
 
-<style scoped>
+<style>
+
+	.recorder-bg {
+		background-color: black;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.recorder-bg .video-panel {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		width: 100%;
+		height: 45px;
+		position: fixed;
+		bottom: 0;
+		background-color: var(--ion-color-primary);
+		z-index: 1;
+	}
+
+	.recorder-bg ion-button.rec-btn {
+		display: block;
+		margin: 0;
+		width: 60px;
+		height: 60px;
+		transform: translateY(-30%);
+		--border-radius: 50%;
+		z-index: 2;
+		position: relative;
+	}
+
+	.recorder-bg .rec-btn__side {
+		height: 45px;
+	}
 
 </style>

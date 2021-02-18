@@ -29,7 +29,7 @@ import { defineComponent, ref } from 'vue'
 import { useStore } from '@/store'
 import { useRouter } from 'vue-router'
 import { IonApp, IonRouterOutlet, menuController, IonMenu, IonContent, IonList, IonItem, IonLabel, IonIcon, IonRippleEffect } from '@ionic/vue'
-import { home, helpCircle, map, card, camera } from 'ionicons/icons'
+import { home, helpCircle, map, card, camera, videocam, film } from 'ionicons/icons'
 
 export default defineComponent({
 	name: 'App',
@@ -48,11 +48,27 @@ export default defineComponent({
 				}
 			},
 			{
+				label: 'Video List',
+				icon: film,
+				handler: async () => {
+					await menuController.close()
+					router.push({ name: 'viewVideoList' }).catch(() => null)
+				}
+			},
+			{
 				label: 'Take Picture',
 				icon: camera,
 				handler: async () => {
 					await menuController.close()
 					store.dispatch('storage/takePicture').then(id => router.push({ name: 'viewImageDetail', params: { id } }))
+				}
+			},
+			{
+				label: 'Record Video',
+				icon: videocam,
+				handler: async () => {
+					await menuController.close()
+					router.push({ name: 'viewVideoRecorder' }).catch(() => null)
 				}
 			},
 			{
@@ -79,14 +95,6 @@ export default defineComponent({
 				handler: async () => {
 					await menuController.close()
 					router.push({ name: 'viewAbout' }).catch(() => null)
-				}
-			},
-			{
-				label: 'Record Video',
-				icon: helpCircle,
-				handler: async () => {
-					await menuController.close()
-					router.push({ name: 'viewVideoRecorder' }).catch(() => null)
 				}
 			}
 		])

@@ -1,9 +1,9 @@
 import { alertController } from '@ionic/vue'
 import { Store } from 'vuex'
 import { StateRoot, ModulesRef } from '@/store/store'
-import { ImageItem } from '@/store/module-storage/module-storage'
+import {ImageItem, MediaItem} from '@/store/module-storage/module-storage'
 
-import { Plugins } from '@capacitor/core'
+import {FilesystemDirectory, Plugins} from '@capacitor/core'
 const { Filesystem } = Plugins
 
 export const withTimeout = (timeout: number, userPromise: Promise<any>): Promise<any> => {
@@ -29,7 +29,7 @@ export const confirmDeletion = async (cb: () => void) => {
 	const alert = await alertController
 		.create({
 			header: 'Please confirm!',
-			message: 'Are you sure that you want to permanently delete this image?',
+			message: 'Are you sure that you want to permanently delete this item?',
 			backdropDismiss: false,
 			buttons: [
 				{
@@ -80,4 +80,26 @@ export const loadImage = (imageItem: ImageItem): Promise<any> => {
 		path: imageItem.path,
 		directory: imageItem.directory as any
 	}).then(file => `data:image/jpeg;base64,${file.data}`)
+}
+
+export const loadMedia = (mediaItem: MediaItem): Promise<string> => {
+	const types = {
+		image: 'data:image/jpeg;base64,',
+		video: 'data:video/mp4;base64,'
+	}
+	return Filesystem.readFile({
+		path: mediaItem.path,
+		directory: FilesystemDirectory.Data
+	}).then(file => `${types[mediaItem.type]}${file.data}`)
+}
+
+export const convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+	const reader = new FileReader()
+	reader.onerror = () => reject(null)
+	reader.onload = () => resolve(reader.result)
+	reader.readAsDataURL(blob)
+})
+
+export const getDate = () => {
+	return (new Date()).toString().split('(')[0].trim()
 }

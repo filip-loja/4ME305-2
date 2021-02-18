@@ -1,7 +1,8 @@
 import { ActionContext } from 'vuex';
 import { StateRoot } from '@/store/store'
-import { StateStorage, ImageItem } from '@/store/module-storage/module-storage'
+import {StateStorage, ImageItem, MediaItem} from '@/store/module-storage/module-storage'
 import { Plugins, CameraResultType, CameraPhoto, FilesystemDirectory } from '@capacitor/core'
+import {convertBlobToBase64, getDate} from '@/utils'
 const { Camera, Filesystem } = Plugins
 
 type A = ActionContext<StateStorage, StateRoot>
@@ -50,5 +51,32 @@ export const takePicture = async (context: A): Promise<number> => {
 	context.commit('ADD_IMAGE', imageItem)
 
 	return Promise.resolve(imageItem.id)
+}
+
+export const saveVideo = async (context: A, blob: Blob): Promise<string|number> => {
+	await context.dispatch('runGeolocation', null, { root: true })
+	const fileName = Date.now() + '.mp4'
+	const base64Data = await convertBlobToBase64(blob) as string
+	const mediaItem: MediaItem = {
+		id: context.state.videoId,
+		path: fileName,
+		type: 'video',
+		date: getDate(),
+		description: null,
+		geolocation: { ...context.rootState.geolocation }
+	}
+
+	try {
+		await Filesystem.writeFile({
+			path: fileName,
+			data: base64Data,
+			directory: FilesystemDirectory.Data
+		})
+		context.commit('ADD_MEDIA_ITEM', mediaItem)
+		return Promise.resolve(mediaItem.id)
+	} catch (e) {
+		return Promise.resolve(e)
+	}
+
 }
 
