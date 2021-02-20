@@ -1,14 +1,14 @@
 <template>
-	<layout-main title="Video recorder">
+	<layout-main title="Video recorder" no-header>
 		<div class="recorder-bg">
+			<div class="top-panel">
+				<ion-button fill="clear" size="large" color="dark" @click="closeCamera">
+					<ion-icon :icon="close" color="light" />
+				</ion-button>
+			</div>
 			<video class="video" ref="video" autoplay playsinline muted style="width: 100%"></video>
-<!--			<ion-button @click="playVideo('1613598255686.mp4')">Play</ion-button>-->
-
-<!--			<div id="video-player"></div>-->
-
-			<!--		<video class="video2" ref="player" autoplay controls style="width: 100%"></video>-->
 			<div class="video-panel">
-				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side">
+				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side" @click="toggleCamera">
 					<ion-icon :icon="repeat" color="light" />
 				</ion-button>
 
@@ -16,8 +16,8 @@
 					<ion-icon :icon="recIcon" />
 				</ion-button>
 
-				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side" @click="closeCamera">
-					<ion-icon :icon="close" color="light" />
+				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side" :router-link="{name: 'viewVideoList'}">
+					<ion-icon :icon="film" color="light" />
 				</ion-button>
 			</div>
 		</div>
@@ -26,11 +26,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
-import {alertController, IonButton, IonIcon} from '@ionic/vue'
-import { videocam, radioButtonOn, close, repeat } from 'ionicons/icons'
-import { Capacitor, Plugins, FilesystemDirectory } from '@capacitor/core'
-import * as WebVPPlugin from 'capacitor-video-player'
-const { CapacitorVideoPlayer, Filesystem } = Plugins
+import { alertController, IonButton, IonIcon } from '@ionic/vue'
+import { videocam, radioButtonOn, close, repeat, film } from 'ionicons/icons'
 import { useStore } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -119,20 +116,6 @@ export default defineComponent({
 			isRecording.value = false
 		}
 
-		// TODO prec
-		const loadVideo = async (fileName: string) =>  {
-			const file = await Filesystem.readFile({
-				path: fileName,
-				directory: FilesystemDirectory.Data
-			})
-			return `data:video/mp4;base64,${file.data}`
-		}
-
-		// TODO prec
-		const playVideo = async (fileName: string) => {
-			player.value.src = await loadVideo(fileName)
-		}
-
 		const toggleRecording = () => {
 			if (isRecording.value) {
 				stopRecording()
@@ -141,18 +124,24 @@ export default defineComponent({
 			}
 		}
 
+		const toggleCamera = () => {
+			// TODO not implemented
+			console.log('NOT IMPLEMENTED')
+		}
+
 		const closeCamera = () => router.back()
 
 		return {
 			toggleRecording,
-			playVideo,
 			video,
 			player,
 			recIcon,
 			recIconColor,
 			close,
 			repeat,
-			closeCamera
+			film,
+			closeCamera,
+			toggleCamera
 		}
 	}
 })
@@ -161,10 +150,12 @@ export default defineComponent({
 <style>
 
 	.recorder-bg {
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: center;
 		background-color: black;
-		display: block;
 		width: 100%;
-		height: 100%;
+		height: calc(100% - 45px);
 	}
 
 	.recorder-bg .video-panel {
@@ -177,6 +168,14 @@ export default defineComponent({
 		bottom: 0;
 		background-color: var(--ion-color-primary);
 		z-index: 1;
+	}
+
+	.recorder-bg .top-panel {
+		display: table;
+		height: 45px;
+		position: fixed;
+		top: -8px;
+		right: -13px;
 	}
 
 	.recorder-bg ion-button.rec-btn {

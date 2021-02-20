@@ -1,6 +1,6 @@
 <template>
 	<ion-page id="main-content">
-		<ion-header>
+		<ion-header v-if="!noHeader">
 			<ion-toolbar>
 				<ion-buttons slot="start" v-if="back || backHref">
 					<ion-back-button v-if="back" :default-href="{name: 'viewImageList'}" />
@@ -63,7 +63,8 @@ export default defineComponent({
 	props: {
 		title: { type: String, required: true },
 		back: { type: Boolean, default: false },
-		backHref: { type: Object, default: null }
+		backHref: { type: Object, default: null },
+		noHeader: { type: Boolean, default: false }
 	},
 	setup () {
 		const openMenu = async () => {
