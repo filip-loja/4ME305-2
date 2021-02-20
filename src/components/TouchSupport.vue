@@ -1,13 +1,11 @@
 <template>
 	<div
-		class="ion-activatable ripple-parent media-thumbnail1"
+		class="ion-activatable ripple-parent"
 		@touchstart="onTouchStart"
 		@touchend="onTouchEnd"
 		@touchmove="onTouchMove"
 	>
-		<div class="media-thumbnail__slot1">
-			<slot />
-		</div>
+		<slot />
 		<ion-ripple-effect />
 	</div>
 </template>
@@ -85,38 +83,5 @@ export default defineComponent({
 </script>
 
 <style>
-
-	.media-thumbnail {
-		display: block;
-		box-sizing: border-box;
-		width: 100%;
-		height: 100px;
-		position: relative;
-		padding: 4px;
-	}
-
-	.media-thumbnail__slot {
-		display: flex;
-		box-sizing: border-box;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.media-thumbnail__slot > * {
-		width: 100%;
-		height: 100%;
-		object-fit: cover !important;
-	}
-
-	.media-thumbnail__icon {
-		position: absolute;
-		bottom: 4px;
-		right: 8px;
-		opacity: 0.8;
-		color: white;
-	}
 
 </style>

@@ -3,13 +3,14 @@
 		<ion-grid>
 			<ion-row>
 				<ion-col size="4" v-for="img in imageList" :key="img.id" style="padding: 0">
-					<media-thumbnail
-						type="image"
+					<touch-support
 						@long-press="showActionSheet(img)"
 						@press="showImageDetail(img.id)"
 					>
-						<stored-image :source="{ path: img.path, directory: img.directory }" />
-					</media-thumbnail>
+						<media-thumbnail type="image">
+							<stored-image :source="{ path: img.path, directory: img.directory }" />
+						</media-thumbnail>
+					</touch-support>
 				</ion-col>
 			</ion-row>
 		</ion-grid>
@@ -24,12 +25,13 @@ import {ImageItem, MediaItem} from '@/store/module-storage/module-storage'
 import { IonGrid, IonRow, IonCol, IonRippleEffect, actionSheetController } from '@ionic/vue'
 import StoredImage from '@/components/StoredImage.vue'
 import MediaThumbnail from '@/components/MediaThumbnail.vue'
+import TouchSupport from '@/components/TouchSupport.vue'
 import { close, trash, logoFacebook, eye, pencil } from 'ionicons/icons'
 import { confirmDeletion } from '@/utils'
 
 export default defineComponent({
 	name: 'ViewImageList',
-	components: { StoredImage, IonGrid, IonRow, IonCol, IonRippleEffect, MediaThumbnail },
+	components: { StoredImage, IonGrid, IonRow, IonCol, IonRippleEffect, MediaThumbnail, TouchSupport },
 	setup () {
 		const store = useStore()
 		const router = useRouter()
