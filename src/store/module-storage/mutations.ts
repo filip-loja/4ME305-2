@@ -1,7 +1,6 @@
 
 import {
 	StateStorage,
-	ImageItem,
 	Credentials,
 	MediaItem,
 	MediaItemUpdate
@@ -16,7 +15,7 @@ export const ADD_MEDIA_ITEM = (state: StateStorage, payload: MediaItem): void =>
 		state.videos[payload.id] = payload
 		state.videoId++
 	} else {
-		state.images[payload.id] = payload as ImageItem // TODO tent as dat potom prec
+		state.images[payload.id] = payload
 		state.imageId++
 	}
 }

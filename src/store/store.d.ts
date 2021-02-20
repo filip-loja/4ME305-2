@@ -1,4 +1,4 @@
-import { ImageItem, StateStorage } from '@/store/module-storage/module-storage'
+import { MediaItem, StateStorage } from '@/store/module-storage/module-storage'
 
 export interface StateRoot {
 	geolocation?: Geo;
@@ -16,7 +16,7 @@ export interface ModulesRef {
 	storage?: StateStorage
 }
 
-export interface ImageUpload extends ImageItem {
+export interface ImageUpload extends MediaItem {
 	data: string;
 }
 

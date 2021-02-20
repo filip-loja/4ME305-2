@@ -12,20 +12,6 @@ export interface MediaItem {
 	geolocation?: Geo;
 	type: MediaType;
 	size?: number;
-	directory?: string;	// TODO vymazat
-}
-
-export interface ImageItem {
-	id?: number;
-	description?: string;
-	directory: string;
-	path: string;
-	date: string;
-	geolocation?: Geo
-}
-
-export interface ImageMap {
-	[key: number]: ImageItem
 }
 
 export interface MediaMap {
@@ -39,7 +25,7 @@ export interface Credentials {
 }
 
 export interface StateStorage {
-	images: ImageMap;
+	images: MediaMap;
 	videos: MediaMap;
 	imageId: number;
 	videoId: number;

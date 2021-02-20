@@ -1,6 +1,6 @@
 import { ActionContext } from 'vuex';
 import { StateRoot } from '@/store/store'
-import {StateStorage, ImageItem, MediaItem} from '@/store/module-storage/module-storage'
+import {StateStorage, MediaItem} from '@/store/module-storage/module-storage'
 import { Plugins, CameraResultType, CameraPhoto, FilesystemDirectory } from '@capacitor/core'
 import {convertBlobToBase64, getDate} from '@/utils'
 const { Camera, Filesystem } = Plugins
@@ -30,7 +30,6 @@ export const takePicture = async (context: A): Promise<number> => {
 		date: (new Date()).toString().split('(')[0].trim(),
 		description: null,
 		path: fileName,
-		directory: FilesystemDirectory.Data,	// TODO toto dat potom prec
 		geolocation: { ...context.rootState.geolocation }
 	}
 

@@ -49,7 +49,7 @@
 import { defineComponent, computed, watch, ref } from 'vue'
 import { useStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
-import { ImageItem } from '@/store/module-storage/module-storage'
+import { MediaItem } from '@/store/module-storage/module-storage'
 import StoredImage from '@/components/StoredImage.vue'
 import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
 import ImageDetailTabs from '@/components/ImageDetailTabs.vue'
@@ -67,7 +67,7 @@ export default defineComponent({
 		const router = useRouter()
 
 		const id = computed<number>(() => Number(route.params.id))
-		const model = ref<ImageItem>(null)
+		const model = ref<MediaItem>(null)
 		const title = computed<string>(() => model.value ? model.value.path : '')
 		const imageData = ref<string>(null)
 

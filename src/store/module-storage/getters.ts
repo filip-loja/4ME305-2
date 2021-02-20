@@ -1,7 +1,7 @@
 
-import { StateStorage, ImageItem, MediaItem } from '@/store/module-storage/module-storage'
+import { StateStorage, MediaItem } from '@/store/module-storage/module-storage'
 
-export const imageList = (state: StateStorage): ImageItem[] => {
+export const imageList = (state: StateStorage): MediaItem[] => {
 	return Object.values(state.images).reverse()
 }
 

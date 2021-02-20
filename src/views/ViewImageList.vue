@@ -21,7 +21,7 @@
 import { defineComponent, computed } from 'vue'
 import { useStore } from '@/store'
 import { useRouter } from 'vue-router'
-import {ImageItem, MediaItem} from '@/store/module-storage/module-storage'
+import { MediaItem } from '@/store/module-storage/module-storage'
 import { IonGrid, IonRow, IonCol, IonRippleEffect, actionSheetController } from '@ionic/vue'
 import StoredImage from '@/components/StoredImage.vue'
 import MediaThumbnail from '@/components/MediaThumbnail.vue'
@@ -35,7 +35,7 @@ export default defineComponent({
 	setup () {
 		const store = useStore()
 		const router = useRouter()
-		const imageList = computed<ImageItem[]>(() => store.getters['storage/imageList'])
+		const imageList = computed<MediaItem[]>(() => store.getters['storage/imageList'])
 
 		const showImageDetail = (imageId: number) => router.push({ name: 'viewImageDetail', params: { id: imageId } })
 
