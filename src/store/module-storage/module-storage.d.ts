@@ -46,13 +46,10 @@ export interface StateStorage {
 	credentials: Credentials;
 }
 
-export interface EditImage {
-	id: number;
-	description: string;
-}
-
-export interface AddMediaItemPayload {
+export interface MediaItemUpdate {
+	id?: number;
+	description?: string;
+	name?: string;
 	type: MediaType;
-	value: MediaItem;
 }
 

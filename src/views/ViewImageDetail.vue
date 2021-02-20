@@ -110,8 +110,8 @@ export default defineComponent({
 			imageData.value = data
 		}
 
-		const goToEditPage = () => {
-			router.push({ name: 'viewImageEdit', params: { id: model.value.id } })
+		const goToEditPage = (): void => {
+			router.push({ name: 'viewMediaEdit', params: { type: 'image', id: model.value.id } })
 		}
 
 		return {

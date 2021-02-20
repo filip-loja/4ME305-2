@@ -52,8 +52,7 @@ export default defineComponent({
 						text: 'Edit Video',
 						icon: pencil,
 						handler: () => {
-							console.log('NOT IMPLEMENTED')
-							// router.push({ name: 'viewImageEdit', params: { id } })
+							router.push({ name: 'viewMediaEdit', params: { type: 'video', id: item.id } })
 						}
 					},
 					{

@@ -52,7 +52,7 @@ export default defineComponent({
 						text: 'Edit Image',
 						icon: pencil,
 						handler: () => {
-							router.push({ name: 'viewImageEdit', params: { id: image.id } })
+							router.push({ name: 'viewMediaEdit', params: { type: 'image', id: image.id } })
 						}
 					},
 					{

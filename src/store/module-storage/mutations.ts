@@ -3,8 +3,8 @@ import {
 	StateStorage,
 	ImageItem,
 	Credentials,
-	EditImage,
-	MediaItem
+	MediaItem,
+	MediaItemUpdate
 } from '@/store/module-storage/module-storage'
 
 export const HYDRATE = (state: StateStorage, payload: StateStorage): void => {
@@ -21,9 +21,16 @@ export const ADD_MEDIA_ITEM = (state: StateStorage, payload: MediaItem): void =>
 	}
 }
 
-export const EDIT_IMAGE_DESCRIPTION = (state: StateStorage, payload: EditImage): void => {
-	if (payload.id in state.images) {
-		state.images[payload.id].description = payload.description
+export const EDIT_MEDIA_ITEM = (state: StateStorage, payload: MediaItemUpdate): void => {
+	if (payload.type === 'video') {
+		if (payload.id in state.videos) {
+			state.videos[payload.id].name = payload.name
+			state.videos[payload.id].description = payload.description
+		}
+	} else {
+		if (payload.id in state.images) {
+			state.images[payload.id].description = payload.description
+		}
 	}
 }
 

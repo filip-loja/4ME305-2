@@ -7,7 +7,7 @@
 
 			<media-action-buttons
 				@click-facebook="() => null"
-				@click-edit="() => null"
+				@click-edit="goToEditPage"
 				@click-delete="deleteMediaItem"
 			/>
 
@@ -65,11 +65,16 @@ export default defineComponent({
 			})
 		}
 
+		const goToEditPage = (): void => {
+			router.push({ name: 'viewMediaEdit', params: { type: 'video', id: model.value.id } })
+		}
+
 		return {
 			model,
 			title,
 			data,
-			deleteMediaItem
+			deleteMediaItem,
+			goToEditPage
 		}
 	}
 })
