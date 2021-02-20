@@ -9,32 +9,24 @@
 <script lang="ts">
 import { defineComponent, watch, ref, PropType } from 'vue'
 import { IonImg } from '@ionic/vue'
-import { Plugins } from '@capacitor/core'
-const { Filesystem } = Plugins
-
-export interface ImageSource {
-	path: string;
-	directory: any;
-}
+import { loadMedia } from '@/utils'
+import { MediaItem } from '@/store/module-storage/module-storage'
 
 export default defineComponent({
 	name: 'StoredImage',
 	components: { IonImg },
 	emits: ['load'],
 	props: {
-		source: { type: Object as PropType<ImageSource|null>, default: null }
+		model: { type: Object as PropType<MediaItem|null>, default: null }
 	},
 	setup (props, { emit }) {
 		const imageSrc = ref(null)
 
-		watch(() => props.source, async (newSource: ImageSource) => {
-			if (newSource) {
-				const file = await Filesystem.readFile({
-					path: newSource.path,
-					directory: newSource.directory
-				})
-				imageSrc.value = `data:image/jpeg;base64,${file.data}`
-				emit('load', imageSrc.value)
+		watch(() => props.model, async (newModel: MediaItem) => {
+			if (newModel) {
+				const data = await loadMedia(newModel)
+				imageSrc.value = data
+				emit('load', data)
 			}
 		}, { immediate: true })
 

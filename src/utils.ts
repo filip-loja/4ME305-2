@@ -1,9 +1,8 @@
 import { alertController } from '@ionic/vue'
 import { Store } from 'vuex'
 import { StateRoot, ModulesRef } from '@/store/store'
-import {ImageItem, MediaItem} from '@/store/module-storage/module-storage'
-
-import {FilesystemDirectory, Plugins} from '@capacitor/core'
+import {MediaItem} from '@/store/module-storage/module-storage'
+import { FilesystemDirectory, Plugins } from '@capacitor/core'
 const { Filesystem } = Plugins
 
 export const withTimeout = (timeout: number, userPromise: Promise<any>): Promise<any> => {
@@ -75,14 +74,8 @@ export const postToFacebook = async (store: Store<StateRoot & ModulesRef>, data:
 	return withTimeout(15000, request).catch(e => e)
 }
 
-export const loadImage = (imageItem: ImageItem): Promise<any> => {
-	return Filesystem.readFile({
-		path: imageItem.path,
-		directory: imageItem.directory as any
-	}).then(file => `data:image/jpeg;base64,${file.data}`)
-}
-
 export const loadMedia = (mediaItem: MediaItem): Promise<string> => {
+	if (!mediaItem.type) mediaItem.type = 'image' // TODO toto potom vyhodit
 	const types = {
 		image: 'data:image/jpeg;base64,',
 		video: 'data:video/mp4;base64,'

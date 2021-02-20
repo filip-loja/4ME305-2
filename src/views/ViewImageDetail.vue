@@ -1,7 +1,7 @@
 <template>
 	<layout-main :title="title" :back-href="{ name: 'viewImageList' }">
 		<div v-if="model">
-			<stored-image :source="imageSource" @load="setImageData" />
+			<stored-image :model="model" @load="setImageData" />
 
 			<ion-card v-if="model.geolocation">
 				<ion-card-header>
@@ -50,7 +50,7 @@ import { defineComponent, computed, watch, ref } from 'vue'
 import { useStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { ImageItem } from '@/store/module-storage/module-storage'
-import StoredImage, { ImageSource } from '@/components/StoredImage.vue'
+import StoredImage from '@/components/StoredImage.vue'
 import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
 import ImageDetailTabs from '@/components/ImageDetailTabs.vue'
 import { map } from 'ionicons/icons'
@@ -72,6 +72,9 @@ export default defineComponent({
 		const imageData = ref<string>(null)
 
 		watch(() => id.value, () => {
+			if (route.name !== 'viewImageDetail') {
+				return
+			}
 			if (id.value) {
 				clearTimeout(store.state.timeoutRef)
 				model.value = store.state.storage.images[id.value]
@@ -80,13 +83,6 @@ export default defineComponent({
 				store.commit('SET_TIMEOUT_REF', ref)
 			}
 		}, { immediate: true })
-
-		const imageSource = computed<ImageSource>(() => {
-			return {
-				path: model.value.path,
-				directory: model.value.directory,
-			}
-		})
 
 		const deleteImage = () => {
 			confirmDeletion(() => {
@@ -120,7 +116,6 @@ export default defineComponent({
 
 		return {
 			model,
-			imageSource,
 			deleteImage,
 			title,
 			map,

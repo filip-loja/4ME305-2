@@ -8,7 +8,7 @@
 						@press="showImageDetail(img.id)"
 					>
 						<media-thumbnail type="image">
-							<stored-image :source="{ path: img.path, directory: img.directory }" />
+							<stored-image :model="img" />
 						</media-thumbnail>
 					</touch-support>
 				</ion-col>

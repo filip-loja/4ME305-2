@@ -40,10 +40,15 @@ export default defineComponent({
 		const data = ref<string>(null)
 
 		watch(() => id.value, () => {
+			if (route.name !== 'viewVideoDetail') {
+				return
+			}
 			if (id.value) {
 				clearTimeout(store.state.timeoutRef)
 				model.value = store.state.storage.videos[id.value]
-				loadMedia(model.value).then(resp => data.value = resp)
+				if (model.value) {
+					loadMedia(model.value).then(resp => data.value = resp)
+				}
 			} else {
 				const ref = setTimeout(() => {
 					model.value = null

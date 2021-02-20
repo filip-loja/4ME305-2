@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router'
 import { RouteRecordRaw } from 'vue-router'
-import store from '@/store'
-import { loadImage } from '@/utils'
-import {ImageUpload} from '@/store/store'
 import { errorAlert } from '@/utils'
 import { imageUploadGuard } from '@/router/router-guards'
 
