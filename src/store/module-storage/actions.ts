@@ -7,20 +7,6 @@ const { Camera, Filesystem } = Plugins
 
 type A = ActionContext<StateStorage, StateRoot>
 
-export const addImage = (context: A, payload: ImageItem) => {
-	payload.id = Date.now()
-	context.commit('ADD_IMAGE', payload)
-}
-
-export const removeImage = (context: A, id: number): Promise<boolean> => {
-	if (id in context.state.images) {
-		context.commit('REMOVE_IMAGE', id)
-		return Promise.resolve(true)
-	} else {
-		return Promise.resolve(false)
-	}
-}
-
 export const takePicture = async (context: A): Promise<number> => {
 	await context.dispatch('runGeolocation', null, { root: true })
 
@@ -31,24 +17,24 @@ export const takePicture = async (context: A): Promise<number> => {
 	})
 
 	const fileName = Date.now() + '.' + image.format
-	const directory = FilesystemDirectory.Data
 
 	await Filesystem.writeFile({
 		data: image.base64String,
 		path: fileName,
-		directory
+		directory: FilesystemDirectory.Data
 	})
 
-	const imageItem: ImageItem = {
+	const imageItem: MediaItem = {
 		id: context.state.imageId,
+		type: 'image',
 		date: (new Date()).toString().split('(')[0].trim(),
 		description: null,
 		path: fileName,
-		directory: directory,
+		directory: FilesystemDirectory.Data,	// TODO toto dat potom prec
 		geolocation: { ...context.rootState.geolocation }
 	}
 
-	context.commit('ADD_IMAGE', imageItem)
+	context.commit('ADD_MEDIA_ITEM', imageItem)
 
 	return Promise.resolve(imageItem.id)
 }
@@ -59,11 +45,13 @@ export const saveVideo = async (context: A, blob: Blob): Promise<string|number> 
 	const base64Data = await convertBlobToBase64(blob) as string
 	const mediaItem: MediaItem = {
 		id: context.state.videoId,
+		name: fileName,
 		path: fileName,
 		type: 'video',
 		date: getDate(),
 		description: null,
-		geolocation: { ...context.rootState.geolocation }
+		geolocation: { ...context.rootState.geolocation },
+		size: blob.size
 	}
 
 	try {

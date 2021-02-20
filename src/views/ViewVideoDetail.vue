@@ -19,11 +19,11 @@
 import { defineComponent, computed, watch, ref } from 'vue'
 import { useStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
-import {ImageItem, MediaItem} from '@/store/module-storage/module-storage'
+import { MediaItem } from '@/store/module-storage/module-storage'
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
 import StoredImage from '@/components/StoredImage.vue'
 import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
-import {confirmDeletion, loadMedia} from '@/utils'
+import { confirmDeletion, loadMedia } from '@/utils'
 import MediaDescription from '@/components/MediaDescription.vue'
 import MediaActionButtons from '@/components/ImageDetailTabs.vue'
 export default defineComponent({
@@ -36,7 +36,7 @@ export default defineComponent({
 
 		const id = computed<number>(() => Number(route.params.id))
 		const model = ref<MediaItem>(null)
-		const title = computed<string>(() => model.value ? model.value.path : '')
+		const title = computed<string>(() => model.value ? model.value.name : '')
 		const data = ref<string>(null)
 
 		watch(() => id.value, () => {

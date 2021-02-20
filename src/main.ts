@@ -34,9 +34,13 @@ const app = createApp(App)
 
 app.component('layout-main', LayoutMain)
 
+import { humanFileSize } from '@/utils'
 app.config.globalProperties.$filters = {
 	pipeGeo (value: number) {
 		return value.toFixed(8)
+	},
+	size (value: number) {
+		return humanFileSize(value)
 	}
 }
 

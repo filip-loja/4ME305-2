@@ -4,7 +4,7 @@ import {
 	ImageItem,
 	Credentials,
 	EditImage,
-	AddMediaItemPayload, MediaItem
+	MediaItem
 } from '@/store/module-storage/module-storage'
 
 export const HYDRATE = (state: StateStorage, payload: StateStorage): void => {
@@ -12,19 +12,13 @@ export const HYDRATE = (state: StateStorage, payload: StateStorage): void => {
 }
 
 export const ADD_MEDIA_ITEM = (state: StateStorage, payload: MediaItem): void => {
-	if (payload.type === 'image') {
-		// @ts-ignore
-		state.images[payload.id] = payload
-		state.imageId++
-	} else if (payload.type === 'video') {
+	if (payload.type === 'video') {
 		state.videos[payload.id] = payload
 		state.videoId++
+	} else {
+		state.images[payload.id] = payload as ImageItem // TODO tent as dat potom prec
+		state.imageId++
 	}
-}
-
-export const ADD_IMAGE = (state: StateStorage, payload: ImageItem): void => {
-	state.images[payload.id] = payload
-	state.imageId++
 }
 
 export const EDIT_IMAGE_DESCRIPTION = (state: StateStorage, payload: EditImage): void => {
@@ -33,20 +27,14 @@ export const EDIT_IMAGE_DESCRIPTION = (state: StateStorage, payload: EditImage):
 	}
 }
 
-export const REMOVE_IMAGE = (state: StateStorage, id: number): void => {
-	if (id in state.images) {
-		delete state.images[id]
-	}
-}
-
 export const REMOVE_MEDIA_ITEM = (state: StateStorage, payload: MediaItem): void => {
-	if (payload.type === 'image') {
-		if (payload.id in state.images) {
-			delete state.images[payload.id]
-		}
-	} else if (payload.type === 'video') {
+	if (payload.type === 'video') {
 		if (payload.id in state.videos) {
 			delete state.videos[payload.id]
+		}
+	} else {
+		if (payload.id in state.images) {
+			delete state.images[payload.id]
 		}
 	}
 }

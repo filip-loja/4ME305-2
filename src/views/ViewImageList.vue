@@ -5,7 +5,7 @@
 				<ion-col size="4" v-for="img in imageList" :key="img.id" style="padding: 0">
 					<media-thumbnail
 						type="image"
-						@long-press="showActionSheet(img.id)"
+						@long-press="showActionSheet(img)"
 						@press="showImageDetail(img.id)"
 					>
 						<stored-image :source="{ path: img.path, directory: img.directory }" />
@@ -20,7 +20,7 @@
 import { defineComponent, computed } from 'vue'
 import { useStore } from '@/store'
 import { useRouter } from 'vue-router'
-import { ImageItem } from '@/store/module-storage/module-storage'
+import {ImageItem, MediaItem} from '@/store/module-storage/module-storage'
 import { IonGrid, IonRow, IonCol, IonRippleEffect, actionSheetController } from '@ionic/vue'
 import StoredImage from '@/components/StoredImage.vue'
 import MediaThumbnail from '@/components/MediaThumbnail.vue'
@@ -37,35 +37,34 @@ export default defineComponent({
 
 		const showImageDetail = (imageId: number) => router.push({ name: 'viewImageDetail', params: { id: imageId } })
 
-		const showActionSheet = async (id: number) => {
+		const showActionSheet = async (image: MediaItem) => {
 			const actionSheet = await actionSheetController.create({
 				header: 'Actions',
-				cssClass: 'my-custom-class',
 				buttons: [
 					{
 						text: 'View Image',
 						icon: eye,
-						handler: () => showImageDetail(id),
+						handler: () => showImageDetail(image.id),
 					},
 					{
 						text: 'Edit Image',
 						icon: pencil,
 						handler: () => {
-							router.push({ name: 'viewImageEdit', params: { id } })
+							router.push({ name: 'viewImageEdit', params: { id: image.id } })
 						}
 					},
 					{
 						text: 'Post to Facebook',
 						icon: logoFacebook,
 						handler: () => {
-							router.push({ name: 'viewImageUpload', params: { id } })
+							router.push({ name: 'viewImageUpload', params: { id: image.id } })
 						}
 					},
 					{
 						text: 'Delete Image',
 						role: 'destructive',
 						icon: trash,
-						handler: () => confirmDeletion(() => store.commit('storage/REMOVE_IMAGE', id)),
+						handler: () => confirmDeletion(() => store.commit('storage/REMOVE_MEDIA_ITEM', image)),
 					},
 					{
 						text: 'Cancel',

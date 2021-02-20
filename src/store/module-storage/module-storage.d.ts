@@ -6,10 +6,13 @@ export type MediaType = 'image' | 'video'
 export interface MediaItem {
 	id?: number;
 	description?: string;
+	name?: string;
 	path: string;
 	date: string;
 	geolocation?: Geo;
 	type: MediaType;
+	size?: number;
+	directory?: string;	// TODO vymazat
 }
 
 export interface ImageItem {

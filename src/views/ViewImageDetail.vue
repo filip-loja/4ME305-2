@@ -90,7 +90,7 @@ export default defineComponent({
 
 		const deleteImage = () => {
 			confirmDeletion(() => {
-				store.commit('storage/REMOVE_IMAGE', model.value.id)
+				store.commit('storage/REMOVE_MEDIA_ITEM', model.value)
 				router.push({ name: 'viewImageList' })
 			})
 		}
