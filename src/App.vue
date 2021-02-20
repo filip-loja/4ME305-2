@@ -28,8 +28,8 @@
 import { defineComponent, ref } from 'vue'
 import { useStore } from '@/store'
 import { useRouter } from 'vue-router'
-import { IonApp, IonRouterOutlet, menuController, IonMenu, IonContent, IonList, IonItem, IonLabel, IonIcon, IonRippleEffect } from '@ionic/vue'
-import { home, helpCircle, map, card, camera, videocam, film } from 'ionicons/icons'
+import { IonApp, IonRouterOutlet, IonMenu, IonContent, IonList, IonItem, IonLabel, IonIcon, IonRippleEffect } from '@ionic/vue'
+import navigation from '@/navigation'
 
 export default defineComponent({
 	name: 'App',
@@ -37,68 +37,7 @@ export default defineComponent({
 	setup () {
 		const store = useStore()
 		const router = useRouter()
-
-		const menuItems = ref([
-			{
-				label: 'Home',
-				icon: home,
-				handler: async () => {
-					await menuController.close()
-					router.push({ name: 'viewImageList' }).catch(() => null)
-				}
-			},
-			{
-				label: 'Video List',
-				icon: film,
-				handler: async () => {
-					await menuController.close()
-					router.push({ name: 'viewVideoList' }).catch(() => null)
-				}
-			},
-			{
-				label: 'Take Picture',
-				icon: camera,
-				handler: async () => {
-					await menuController.close()
-					store.dispatch('storage/takePicture').then(id => router.push({ name: 'viewImageDetail', params: { id } }))
-				}
-			},
-			{
-				label: 'Record Video',
-				icon: videocam,
-				handler: async () => {
-					await menuController.close()
-					router.push({ name: 'viewVideoRecorder' }).catch(() => null)
-				}
-			},
-			{
-				label: 'Find me',
-				icon: map,
-				handler: async () => {
-					await menuController.close()
-					await store.dispatch('runGeolocation')
-					store.commit('SET_MAP_TITLE', '[ME]')
-					router.push({ name: 'viewMap' }).catch(() => null)
-				}
-			},
-			{
-				label: 'Credentials',
-				icon: card,
-				handler: async () => {
-					await menuController.close()
-					router.push({ name: 'viewCredentials' }).catch(() => null)
-				}
-			},
-			{
-				label: 'About',
-				icon: helpCircle,
-				handler: async () => {
-					await menuController.close()
-					router.push({ name: 'viewAbout' }).catch(() => null)
-				}
-			}
-		])
-
+		const menuItems = ref(navigation(router, store))
 		return {
 			menuItems
 		}

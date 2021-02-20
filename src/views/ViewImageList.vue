@@ -1,5 +1,5 @@
 <template>
-	<layout-main title="Gallery">
+	<layout-main title="Images">
 		<ion-grid>
 			<ion-row>
 				<ion-col size="4" v-for="img in imageList" :key="img.id" style="padding: 0">

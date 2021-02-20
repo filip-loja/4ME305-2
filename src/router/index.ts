@@ -6,6 +6,11 @@ import { imageUploadGuard } from '@/router/router-guards'
 const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/',
+		component: () => import('@/views/ViewHome.vue'),
+		name: 'viewHome'
+	},
+	{
+		path: '/images/list',
 		component: () => import('@/views/ViewImageList.vue'),
 		name: 'viewImageList'
 	},
