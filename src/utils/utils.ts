@@ -1,7 +1,5 @@
 import { alertController } from '@ionic/vue'
-import { Store } from 'vuex'
-import { StateRoot, ModulesRef } from '@/store/store'
-import {MediaItem} from '@/store/module-storage/module-storage'
+import { MediaItem } from '@/store/module-storage/module-storage'
 import { FilesystemDirectory, Plugins } from '@capacitor/core'
 const { Filesystem } = Plugins
 
@@ -45,33 +43,9 @@ export const confirmDeletion = async (cb: () => void) => {
 	return alert.present()
 }
 
-export interface FacebookPost {
-	image: string;
-	message: string;
-}
-
-export const postToFacebook = async (store: Store<StateRoot & ModulesRef>, data: FacebookPost) => {
-
-	const base64Response = await fetch(data.image)
-	const blob = await base64Response.blob()
-
-	const formData = new FormData()
-	formData.append('access_token', store.state.storage.credentials.facebookToken)
-	formData.append('message', data.message)
-	formData.append('source', blob)
-	const url = `https://graph.facebook.com/${store.state.storage.credentials.facebookPage}/photos`
-
-	const request = fetch(url, { body: formData, method: 'post' })
-		.then(response => response.json())
-		.then(data => {
-			if (data.id) {
-				return null
-			} else {
-				return data.error.message
-			}
-		})
-
-	return withTimeout(15000, request).catch(e => e)
+export const convertToBlob = async (data: string): Promise<Blob> => {
+	const base64Response = await fetch(data)
+	return await base64Response.blob()
 }
 
 export const loadMedia = (mediaItem: MediaItem): Promise<string> => {

@@ -1,7 +1,7 @@
 import { createStore, Store, useStore as baseUseStore, ModuleTree } from 'vuex'
 import { InjectionKey } from 'vue'
 import moduleStorage from '@/store/module-storage'
-import { StateRoot, ModulesRef, StoreDef } from '@/store/store'
+import { StoreDef } from '@/store/store'
 import * as actions from '@/store/actions'
 import * as mutations from '@/store/mutations'
 import { persistent } from '@/store/persistent'
@@ -19,7 +19,6 @@ const store = createStore<StoreDef>({
   state: {
 		geolocation: null,
 		mapTitle: null,
-		imageUpload: null,
 		timeoutRef: null,
 		loadedMedia: null,
 	},

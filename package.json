@@ -18,6 +18,7 @@
     "@types/dom-mediacapture-record": "^1.0.7",
     "capacitor-video-player": "^2.4.5-2",
     "core-js": "^3.6.5",
+    "fb": "^2.0.0",
     "ionicons": "^5.5.0",
     "vue": "^3.0.0-0",
     "vue-router": "^4.0.0-0",

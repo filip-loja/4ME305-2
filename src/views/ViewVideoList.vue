@@ -26,7 +26,7 @@ import { MediaItem } from '@/store/module-storage/module-storage'
 import { IonList, IonItem, IonLabel, IonIcon, actionSheetController } from '@ionic/vue'
 import {close, eye, film, logoFacebook, pencil, trash} from 'ionicons/icons'
 import TouchSupport from '@/components/TouchSupport.vue'
-import {confirmDeletion} from '@/utils'
+import {confirmDeletion} from '@/utils/utils'
 export default defineComponent({
 	name: 'ViewVideoList',
 	components: { IonList, IonItem, IonLabel, IonIcon, TouchSupport },

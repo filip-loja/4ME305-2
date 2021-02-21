@@ -27,7 +27,7 @@ import StoredImage from '@/components/StoredImage.vue'
 import MediaThumbnail from '@/components/MediaThumbnail.vue'
 import TouchSupport from '@/components/TouchSupport.vue'
 import { close, trash, logoFacebook, eye, pencil } from 'ionicons/icons'
-import { confirmDeletion } from '@/utils'
+import { confirmDeletion } from '@/utils/utils'
 
 export default defineComponent({
 	name: 'ViewImageList',

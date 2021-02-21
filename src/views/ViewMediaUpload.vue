@@ -59,13 +59,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useStore } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
-import { FacebookPost, postToFacebook } from '@/utils'
+import { postVideoToFacebook, postImageToFacebook, FacebookPost } from '@/utils/facebook'
 import { IonList, IonItem, IonLabel, IonInput, IonButton, IonTextarea, IonToggle, alertController, IonProgressBar, IonImg } from '@ionic/vue'
 import { MediaItem } from '@/store/module-storage/module-storage'
-import {LoadedMedia} from '@/store/store'
+import { LoadedMedia } from '@/store/store'
 
 export default defineComponent({
 	name: 'ViewMediaUpload',
@@ -115,32 +115,36 @@ export default defineComponent({
 			useName.value = true
 		}, { immediate: true })
 
-
-
 		const sendToFacebook = () => {
 			let message = ''
-			if (useName.value && model.value.type === 'video') message = name.value + '\n\n'
-			if (useDescription.value) message = description.value + '\n\n'
+			if (useName.value && model.value.type === 'video' && name.value && name.value.trim()) message = name.value + '\n'
+			if (useDescription.value && description.value && description.value.trim()) message = message + description.value + '\n'
 			if (useDate.value) message = message + 'Date: ' + model.value.date + '\n'
 			if (useGeolocation.value && model.value.geolocation) message = message + `Location: ${model.value.geolocation.lat} x ${model.value.geolocation.lon}`
 
+			console.log('POST DESCRIPTION:')
+			console.log(message)
+
 			const post: FacebookPost = {
-				image: data.value.data,
+				data: data.value.data,
 				message
 			}
 
 			loading.value = true
-			postToFacebook(store, post).then(err => {
+			const request = model.value.type === 'video' ? postVideoToFacebook(store, post) : postImageToFacebook(store, post)
+			request.then(err => {
 				loading.value = false
 				if (err === null) {
 					alertController.create({
 						header: 'Upload successful!',
-						message: 'Your picture was successfully uploaded to Facebook.',
+						message: 'Uploaded to Facebook finished successfully.',
 						backdropDismiss: false,
 						buttons: [{
 							text: 'Ok',
 							handler: () => {
-								router.push({ name: 'viewImageDetail', params: { id: model.value.id } })
+								const routeName = model.value.type === 'video' ? 'viewVideoDetail' : 'viewImageDetail'
+								router.push({ name: routeName, params: { id: model.value.id } })
+								store.commit('LOAD_MEDIA', null)
 							}
 						}]
 					}).then(alert => alert.present())
@@ -158,10 +162,6 @@ export default defineComponent({
 				}
 			})
 		}
-
-		onBeforeUnmount(() => {
-			store.commit('SET_IMAGE_UPLOAD', null)
-		})
 
 		return {
 			sendToFacebook,

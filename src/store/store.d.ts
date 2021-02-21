@@ -3,7 +3,6 @@ import {MediaItem, MediaType, StateStorage} from '@/store/module-storage/module-
 export interface StateRoot {
 	geolocation?: Geo;
 	mapTitle: string;
-	imageUpload: ImageUpload;
 	timeoutRef: number;
 	loadedMedia: LoadedMedia;
 }
@@ -20,10 +19,6 @@ export interface ModulesRef {
 export interface LoadedMedia {
 	id: number;
 	type: MediaType;
-	data: string;
-}
-
-export interface ImageUpload extends MediaItem {
 	data: string;
 }
 

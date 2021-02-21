@@ -1,7 +1,7 @@
 import { ActionContext } from 'vuex'
 import { Geo, StateRoot } from '@/store/store'
 import { GeolocationPosition } from '@capacitor/core'
-import { withTimeout } from '@/utils'
+import { withTimeout } from '@/utils/utils'
 import { Plugins } from '@capacitor/core'
 const { Geolocation } = Plugins
 

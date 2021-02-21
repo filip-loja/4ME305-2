@@ -55,8 +55,8 @@ import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
 import ImageDetailTabs from '@/components/ImageDetailTabs.vue'
 import { map } from 'ionicons/icons'
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
-import { confirmDeletion } from '@/utils'
-import {ImageUpload, LoadedMedia} from '@/store/store'
+import { confirmDeletion } from '@/utils/utils'
+import {LoadedMedia} from '@/store/store'
 
 export default defineComponent({
 	name: 'ViewImageDetail',

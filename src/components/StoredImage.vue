@@ -9,7 +9,7 @@
 <script lang="ts">
 import { defineComponent, watch, ref, PropType } from 'vue'
 import { IonImg } from '@ionic/vue'
-import { loadMedia } from '@/utils'
+import { loadMedia } from '@/utils/utils'
 import { MediaItem } from '@/store/module-storage/module-storage'
 
 export default defineComponent({

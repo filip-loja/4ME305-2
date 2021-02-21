@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router'
 import { RouteRecordRaw } from 'vue-router'
-import { errorAlert } from '@/utils'
+import { errorAlert } from '@/utils/utils'
 import { imageUploadGuard } from '@/router/router-guards'
 
 const routes: Array<RouteRecordRaw> = [

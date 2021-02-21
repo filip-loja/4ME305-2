@@ -1,5 +1,5 @@
 import { RouteLocationNormalized } from 'vue-router'
-import { loadMedia } from '@/utils'
+import { loadMedia } from '@/utils/utils'
 import { LoadedMedia } from '@/store/store'
 import { MediaItem } from '@/store/module-storage/module-storage'
 import store from '@/store'
