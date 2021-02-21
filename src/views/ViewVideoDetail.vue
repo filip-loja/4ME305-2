@@ -6,7 +6,7 @@
 			<media-description :model="model" />
 
 			<media-action-buttons
-				@click-facebook="() => null"
+				@click-facebook="sendToFacebook"
 				@click-edit="goToEditPage"
 				@click-delete="deleteMediaItem"
 			/>
@@ -26,6 +26,7 @@ import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
 import { confirmDeletion, loadMedia } from '@/utils'
 import MediaDescription from '@/components/MediaDescription.vue'
 import MediaActionButtons from '@/components/ImageDetailTabs.vue'
+import {LoadedMedia} from '@/store/store'
 export default defineComponent({
 	name: 'ViewVideoDetail',
 	components: { StoredImage, GoogleMapHeader, IonButton, IonCard, IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle, MediaActionButtons, MediaDescription },
@@ -58,6 +59,16 @@ export default defineComponent({
 			}
 		}, { immediate: true })
 
+		const sendToFacebook = () => {
+			const loadedMedia: LoadedMedia = {
+				id: model.value.id,
+				type: 'video',
+				data: data.value
+			}
+			store.commit('LOAD_MEDIA', loadedMedia)
+			router.push({ name: 'viewMediaUpload', params: { type: 'video', id: model.value.id } })
+		}
+
 		const deleteMediaItem = () => {
 			confirmDeletion(() => {
 				store.commit('storage/REMOVE_MEDIA_ITEM', model.value)
@@ -74,7 +85,8 @@ export default defineComponent({
 			title,
 			data,
 			deleteMediaItem,
-			goToEditPage
+			goToEditPage,
+			sendToFacebook
 		}
 	}
 })

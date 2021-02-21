@@ -56,7 +56,7 @@ import ImageDetailTabs from '@/components/ImageDetailTabs.vue'
 import { map } from 'ionicons/icons'
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
 import { confirmDeletion } from '@/utils'
-import { ImageUpload } from '@/store/store'
+import {ImageUpload, LoadedMedia} from '@/store/store'
 
 export default defineComponent({
 	name: 'ViewImageDetail',
@@ -98,12 +98,13 @@ export default defineComponent({
 		}
 
 		const sendToFacebook = () => {
-			const imageUpload: ImageUpload = {
-				...model.value,
+			const loadedMedia: LoadedMedia = {
+				id: model.value.id,
+				type: 'image',
 				data: imageData.value
 			}
-			store.commit('SET_IMAGE_UPLOAD', imageUpload)
-			router.push({ name: 'viewImageUpload', params: { id: model.value.id } })
+			store.commit('LOAD_MEDIA', loadedMedia)
+			router.push({ name: 'viewMediaUpload', params: { type: 'image', id: model.value.id } })
 		}
 
 		const setImageData = (data: string): void => {

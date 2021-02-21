@@ -49,12 +49,8 @@ export default defineComponent({
 			clearTimeout(store.state.timeoutRef)
 			const id = Number(route.params.id)
 			const type = route.params.type
-
-			if (type === 'video') {
-				model.value = store.state.storage.videos[id]
-			} else {
-				model.value = store.state.storage.images[id] as any // TODO dat prec any
-			}
+			const storageType = type === 'video' ? 'videos' : 'images'
+			model.value = store.state.storage[storageType][id]
 
 			if (model.value) {
 				data.value.id = id

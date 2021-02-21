@@ -20,9 +20,9 @@ const routes: Array<RouteRecordRaw> = [
 		name: 'viewMediaEdit'
 	},
 	{
-		path: '/images/:id/post',
-		component: () => import('@/views/ViewImageUpload.vue'),
-		name: 'viewImageUpload'
+		path: '/upload/:type/:id',
+		component: () => import('@/views/ViewMediaUpload.vue'),
+		name: 'viewMediaUpload'
 	},
 	{
 		path: '/images/:id',
@@ -67,7 +67,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-	if (to.name === 'viewImageUpload') {
+	if (to.name === 'viewMediaUpload') {
 		imageUploadGuard(to).then(() => next())
 			.catch(e => errorAlert(e).then(() => next(false)))
 	} else {

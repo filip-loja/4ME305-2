@@ -1,11 +1,20 @@
 <template>
-	<layout-main title="Image upload" back>
+	<layout-main title="Facebook upload" back>
 		<ion-progress-bar type="indeterminate" color="warning" v-if="loading" />
 		<div v-if="model">
 			<div class="img-preview">
-				<ion-img class="img-preview-cmp" :src="model.data" />
+				<ion-img v-if="model.type === 'image'" class="img-preview-cmp" :src="data.data" />
 				<div class="options">
 					<ion-list>
+
+						<ion-item v-if="model.type === 'video'">
+							<ion-label>Name</ion-label>
+							<ion-toggle
+								@ionChange="useName = !useName"
+								:checked="useName === true"
+							/>
+						</ion-item>
+
 						<ion-item>
 							<ion-label>Post text</ion-label>
 							<ion-toggle
@@ -33,6 +42,10 @@
 				</div>
 			</div>
 			<ion-list>
+				<ion-item v-if="model.type === 'video'">
+					<ion-label position="floating">Video name</ion-label>
+					<ion-input v-model="name" :disabled="!useName" />
+				</ion-item>
 				<ion-item>
 					<ion-label position="floating">Post text</ion-label>
 					<ion-textarea :rows="6" v-model="description" :disabled="!useDescription" />
@@ -46,35 +59,73 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, watch, onBeforeUnmount } from 'vue'
 import { useStore } from '@/store'
-import { useRouter } from 'vue-router'
-import { ImageUpload } from '@/store/store'
+import { useRouter, useRoute } from 'vue-router'
 import { FacebookPost, postToFacebook } from '@/utils'
 import { IonList, IonItem, IonLabel, IonInput, IonButton, IonTextarea, IonToggle, alertController, IonProgressBar, IonImg } from '@ionic/vue'
+import { MediaItem } from '@/store/module-storage/module-storage'
+import {LoadedMedia} from '@/store/store'
 
 export default defineComponent({
-	name: 'ViewImageUpload',
+	name: 'ViewMediaUpload',
 	components: { IonList, IonItem, IonLabel, IonInput, IonButton, IonTextarea, IonToggle, IonProgressBar, IonImg },
 	setup () {
 		const store = useStore()
 		const router = useRouter()
-		const model = computed<ImageUpload>(() => store.state.imageUpload)
-		const loading = ref<boolean>(false)
+		const route = useRoute()
 
-		const description = ref<string>(model.value.description)
+		const model = ref<MediaItem>(null)
+		const data = ref<LoadedMedia>(null)
+		const loading = ref<boolean>(false)
+		const description = ref<string>(null)
+		const name = ref<string>(null)
 		const useDescription = ref<boolean>(true)
 		const useDate = ref<boolean>(true)
 		const useGeolocation = ref<boolean>(true)
+		const useName = ref<boolean>(true)
+
+		watch(() => route.params, (newParams) => {
+			if (route.name !== 'viewMediaUpload') {
+				return
+			}
+
+			if (!newParams || !newParams.id || !newParams.type) {
+				const ref = setTimeout(() => {
+					model.value = null
+					data.value = null
+				}, 300)
+				store.commit('SET_TIMEOUT_REF', ref)
+				return
+			}
+
+			clearTimeout(store.state.timeoutRef)
+			const id = Number(route.params.id)
+			const type = route.params.type
+			const storageType = type === 'video' ? 'videos' : 'images'
+			model.value = store.state.storage[storageType][id]
+			data.value = store.state.loadedMedia
+
+			loading.value = false
+			description.value = model.value.description
+			name.value = model.value.name
+			useDescription.value = true
+			useDate.value = true
+			useGeolocation.value = true
+			useName.value = true
+		}, { immediate: true })
+
+
 
 		const sendToFacebook = () => {
 			let message = ''
+			if (useName.value && model.value.type === 'video') message = name.value + '\n\n'
 			if (useDescription.value) message = description.value + '\n\n'
 			if (useDate.value) message = message + 'Date: ' + model.value.date + '\n'
 			if (useGeolocation.value && model.value.geolocation) message = message + `Location: ${model.value.geolocation.lat} x ${model.value.geolocation.lon}`
 
 			const post: FacebookPost = {
-				image: model.value.data,
+				image: data.value.data,
 				message
 			}
 
@@ -115,11 +166,14 @@ export default defineComponent({
 		return {
 			sendToFacebook,
 			description,
+			name,
 			useDescription,
 			useDate,
 			useGeolocation,
+			useName,
 			model,
-			loading
+			loading,
+			data
 		}
 	}
 })

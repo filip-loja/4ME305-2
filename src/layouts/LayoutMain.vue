@@ -40,7 +40,6 @@ import {
 	menuController,
 	IonIcon
 } from '@ionic/vue'
-import { useRoute } from 'vue-router'
 import { menu, arrowBack } from 'ionicons/icons'
 
 export default defineComponent({

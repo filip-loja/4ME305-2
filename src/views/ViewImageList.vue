@@ -59,7 +59,7 @@ export default defineComponent({
 						text: 'Post to Facebook',
 						icon: logoFacebook,
 						handler: () => {
-							router.push({ name: 'viewImageUpload', params: { id: image.id } })
+							router.push({ name: 'viewMediaUpload', params: { type: 'image', id: image.id } })
 						}
 					},
 					{

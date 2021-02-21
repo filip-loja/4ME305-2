@@ -20,7 +20,8 @@ const store = createStore<StoreDef>({
 		geolocation: null,
 		mapTitle: null,
 		imageUpload: null,
-		timeoutRef: null
+		timeoutRef: null,
+		loadedMedia: null,
 	},
 	mutations,
 	actions
