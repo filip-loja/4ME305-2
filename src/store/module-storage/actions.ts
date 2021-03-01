@@ -1,8 +1,9 @@
-import { ActionContext } from 'vuex';
-import { StateRoot } from '@/store/store'
-import {StateStorage, MediaItem} from '@/store/module-storage/module-storage'
-import { Plugins, CameraResultType, CameraPhoto, FilesystemDirectory } from '@capacitor/core'
+import {ActionContext} from 'vuex';
+import {StateRoot} from '@/store/store'
+import {MediaItem, StateStorage} from '@/store/module-storage/module-storage'
+import {CameraPhoto, CameraResultType, CameraSource, FilesystemDirectory, Plugins} from '@capacitor/core'
 import {convertBlobToBase64, getDate} from '@/utils/utils'
+
 const { Camera, Filesystem } = Plugins
 
 type A = ActionContext<StateStorage, StateRoot>
@@ -13,7 +14,8 @@ export const takePicture = async (context: A): Promise<number> => {
 	const image: CameraPhoto = await Camera.getPhoto({
 		quality: 70,
 		allowEditing: false,
-		resultType: CameraResultType.Base64
+		resultType: CameraResultType.Base64,
+		source: CameraSource.Camera
 	})
 
 	const fileName = Date.now() + '.' + image.format
