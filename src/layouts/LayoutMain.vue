@@ -32,10 +32,6 @@ import {
 	IonToolbar,
 	IonBackButton,
 	IonButtons,
-	IonMenu,
-	IonLabel,
-	IonItem,
-	IonList,
 	IonButton,
 	menuController,
 	IonIcon
@@ -52,10 +48,6 @@ export default defineComponent({
 		IonToolbar,
 		IonBackButton,
 		IonButtons,
-		IonMenu,
-		IonLabel,
-		IonItem,
-		IonList,
 		IonButton,
 		IonIcon
 	},

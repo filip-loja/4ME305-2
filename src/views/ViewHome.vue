@@ -28,14 +28,12 @@ import {
 	IonCol,
 	IonCard,
 	IonCardHeader,
-	IonCardContent,
-	IonCardSubtitle,
 	IonCardTitle, IonIcon
 } from '@ionic/vue'
 import TouchSupport from '@/components/TouchSupport.vue'
 export default defineComponent({
 	name: 'ViewHome',
-	components: { IonGrid, IonRow, IonCol, TouchSupport, IonCard, IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle, IonIcon },
+	components: { IonGrid, IonRow, IonCol, TouchSupport, IonCard, IonCardHeader, IonCardTitle, IonIcon },
 	setup () {
 		const store = useStore()
 		const router = useRouter()

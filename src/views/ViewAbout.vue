@@ -6,20 +6,16 @@
 				<ion-card-title><strong>Assignment 2</strong></ion-card-title>
 				<ion-card-subtitle>Created by: <strong>Filip Loja</strong></ion-card-subtitle>
 			</ion-card-header>
-
-			<ion-card-content>
-				TODO some text here
-			</ion-card-content>
 		</ion-card>
 	</layout-main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { IonCard, IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
+import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
 export default defineComponent({
 	name: 'ViewAbout',
-	components: { IonCard, IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle }
+	components: { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle }
 })
 </script>
 

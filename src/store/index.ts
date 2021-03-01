@@ -1,4 +1,4 @@
-import { createStore, Store, useStore as baseUseStore, ModuleTree } from 'vuex'
+import { createStore, Store, useStore as baseUseStore } from 'vuex'
 import { InjectionKey } from 'vue'
 import moduleStorage from '@/store/module-storage'
 import { StoreDef } from '@/store/store'

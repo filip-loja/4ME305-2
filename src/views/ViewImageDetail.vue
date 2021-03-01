@@ -2,40 +2,7 @@
 	<layout-main :title="title" :back-href="{ name: 'viewImageList' }">
 		<div v-if="model">
 			<stored-image :model="model" @load="setImageData" />
-
-			<ion-card v-if="model.geolocation">
-				<ion-card-header>
-					<ion-card-subtitle><b>Location:</b></ion-card-subtitle>
-				</ion-card-header>
-				<ion-card-content>
-					<google-map-header
-						style="padding: 0"
-						:lat="model.geolocation.lat"
-						:lon="model.geolocation.lon"
-						:icon="map"
-						@click="showMap"
-					/>
-				</ion-card-content>
-			</ion-card>
-
-			<ion-card>
-				<ion-card-header>
-					<ion-card-subtitle><b>Date:</b></ion-card-subtitle>
-				</ion-card-header>
-				<ion-card-content>
-					{{ model.date }}
-				</ion-card-content>
-			</ion-card>
-
-			<ion-card v-if="model.description">
-				<ion-card-header>
-					<ion-card-subtitle><b>Description: </b></ion-card-subtitle>
-				</ion-card-header>
-				<ion-card-content style="white-space: pre-line">
-					{{ model.description }}
-				</ion-card-content>
-			</ion-card>
-
+			<media-description :model="model" />
 			<image-detail-tabs
 				@click-facebook="sendToFacebook"
 				@click-edit="goToEditPage"
@@ -51,16 +18,15 @@ import { useStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { MediaItem } from '@/store/module-storage/module-storage'
 import StoredImage from '@/components/StoredImage.vue'
-import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
 import ImageDetailTabs from '@/components/ImageDetailTabs.vue'
+import MediaDescription from '@/components/MediaDescription.vue'
 import { map } from 'ionicons/icons'
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
 import { confirmDeletion } from '@/utils/utils'
 import {LoadedMedia} from '@/store/store'
 
 export default defineComponent({
 	name: 'ViewImageDetail',
-	components: { StoredImage, GoogleMapHeader, IonButton, IonCard, IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle, ImageDetailTabs },
+	components: { StoredImage, ImageDetailTabs, MediaDescription },
 	setup () {
 		const store = useStore()
 		const route = useRoute()

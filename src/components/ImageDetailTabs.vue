@@ -17,13 +17,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { IonContent, IonFooter, IonTitle, IonToolbar, IonButton, IonIcon } from '@ionic/vue'
+import { IonFooter, IonButton, IonIcon } from '@ionic/vue'
 import { logoFacebook, trash, pencil } from 'ionicons/icons'
 
 export default defineComponent({
 	name: 'ImageDetailTabs',
 	emits: ['click-facebook', 'click-edit', 'click-delete'],
-	components: { IonContent, IonFooter, IonTitle, IonToolbar, IonButton, IonIcon },
+	components: { IonFooter, IonButton, IonIcon },
 	setup (props, { emit }) {
 		return {
 			logoFacebook,

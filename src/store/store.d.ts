@@ -1,4 +1,4 @@
-import {MediaItem, MediaType, StateStorage} from '@/store/module-storage/module-storage'
+import {MediaType, StateStorage} from '@/store/module-storage/module-storage'
 
 export interface StateRoot {
 	geolocation?: Geo;
@@ -13,7 +13,7 @@ export interface Geo {
 }
 
 export interface ModulesRef {
-	storage?: StateStorage
+	storage?: StateStorage;
 }
 
 export interface LoadedMedia {

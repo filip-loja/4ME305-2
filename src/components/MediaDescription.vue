@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle } from '@ionic/vue'
 import { map } from 'ionicons/icons'
 import { MediaItem } from '@/store/module-storage/module-storage'
 import { useStore } from '@/store'
@@ -45,7 +45,7 @@ import { useRouter } from 'vue-router'
 import GoogleMapHeader from '@/components/map/GoogleMapHeader.vue'
 export default defineComponent({
 	name: 'MediaDescription',
-	components: { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, GoogleMapHeader },
+	components: { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, GoogleMapHeader },
 	props: {
 		model: { type: Object as PropType<MediaItem>, default: null }
 	},

@@ -12,10 +12,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { IonRippleEffect, IonIcon } from '@ionic/vue'
+import { IonRippleEffect } from '@ionic/vue'
 export default defineComponent({
 	name: 'TouchSupport',
-	components: { IonRippleEffect, IonIcon },
+	components: { IonRippleEffect },
 	emits: ['press', 'long-press'],
 	setup (props, { emit }) {
 

@@ -22,7 +22,7 @@ import { defineComponent, computed } from 'vue'
 import { useStore } from '@/store'
 import { useRouter } from 'vue-router'
 import { MediaItem } from '@/store/module-storage/module-storage'
-import { IonGrid, IonRow, IonCol, IonRippleEffect, actionSheetController } from '@ionic/vue'
+import { IonGrid, IonRow, IonCol, actionSheetController } from '@ionic/vue'
 import StoredImage from '@/components/StoredImage.vue'
 import MediaThumbnail from '@/components/MediaThumbnail.vue'
 import TouchSupport from '@/components/TouchSupport.vue'
@@ -31,7 +31,7 @@ import { confirmDeletion } from '@/utils/utils'
 
 export default defineComponent({
 	name: 'ViewImageList',
-	components: { StoredImage, IonGrid, IonRow, IonCol, IonRippleEffect, MediaThumbnail, TouchSupport },
+	components: { StoredImage, IonGrid, IonRow, IonCol, MediaThumbnail, TouchSupport },
 	setup () {
 		const store = useStore()
 		const router = useRouter()
