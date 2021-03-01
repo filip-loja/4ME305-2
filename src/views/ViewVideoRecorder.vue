@@ -2,13 +2,13 @@
 	<layout-main title="Video recorder" no-header>
 		<div class="recorder-bg">
 			<div class="top-panel">
-				<ion-button fill="clear" size="large" color="dark" @click="closeCamera">
+				<ion-button fill="clear" size="large" color="dark" @click="closeCamera" :disabled="isRecording">
 					<ion-icon :icon="close" color="light" />
 				</ion-button>
 			</div>
 			<video class="video" ref="video" autoplay playsinline muted style="width: 100%"></video>
 			<div class="video-panel">
-				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side" @click="toggleCamera">
+				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side" @click="toggleCamera" :disabled="isRecording">
 					<ion-icon :icon="repeat" color="light" />
 				</ion-button>
 
@@ -16,7 +16,7 @@
 					<ion-icon :icon="recIcon" />
 				</ion-button>
 
-				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side" :router-link="{name: 'viewVideoList'}">
+				<ion-button fill="clear" size="large" color="dark" class="rec-btn__side" :router-link="{name: 'viewVideoList'}" :disabled="isRecording">
 					<ion-icon :icon="film" color="light" />
 				</ion-button>
 			</div>
@@ -31,6 +31,8 @@ import { videocam, radioButtonOn, close, repeat, film } from 'ionicons/icons'
 import { useStore } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
 
+type CameraMode = 'front' | 'back'
+
 export default defineComponent({
 	name: 'ViewVideoRecorder',
 	components: { IonButton, IonIcon },
@@ -41,6 +43,7 @@ export default defineComponent({
 
 		const player = ref(null)
 		const isRecording = ref<boolean>(false)
+		let mode: CameraMode = 'front'
 
 		let stream: any = null
 		const video = ref(null)
@@ -52,13 +55,21 @@ export default defineComponent({
 			}
 		}
 
-		watch(() => route.name, async routeName => {
+		const openStream = async () => {
+			const modes = {
+				front: 'user',
+				back: { exact: 'environment' }
+			}
+			stream = await navigator.mediaDevices.getUserMedia({
+				video: { facingMode: modes[mode] },
+				audio: true
+			})
+			video.value.srcObject = stream
+		}
+
+		watch(() => route.name, routeName => {
 			if (routeName === 'viewVideoRecorder') {
-				stream = await navigator.mediaDevices.getUserMedia({
-					video: { facingMode: 'user' },
-					audio: true
-				})
-				video.value.srcObject = stream
+				openStream()
 			} else {
 				closeStream()
 				video.value.srcObject = null
@@ -125,13 +136,16 @@ export default defineComponent({
 		}
 
 		const toggleCamera = () => {
-			// TODO not implemented
-			console.log('NOT IMPLEMENTED')
+			closeStream()
+			video.value.srcObject = null
+			mode = mode === 'back' ? 'front' : 'back'
+			openStream()
 		}
 
 		const closeCamera = () => router.back()
 
 		return {
+			isRecording,
 			toggleRecording,
 			video,
 			player,
