@@ -57,12 +57,6 @@ export default defineComponent({
 			})
 		}
 
-		const showMap = async () => {
-			store.commit('SET_MAP_TITLE', model.value.path)
-			store.commit('SET_GEOLOCATION', model.value.geolocation)
-			router.push({ name: 'viewMap' }).catch(() => null)
-		}
-
 		const sendToFacebook = () => {
 			const loadedMedia: LoadedMedia = {
 				id: model.value.id,
@@ -86,7 +80,6 @@ export default defineComponent({
 			deleteImage,
 			title,
 			map,
-			showMap,
 			sendToFacebook,
 			setImageData,
 			goToEditPage
